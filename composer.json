@@ -1,0 +1,35 @@
+{
+    "name": "focalcrm/sales",
+    "description": "Sales, Deals, and Pipeline Management for Focal CRM",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Focal Team"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "focalcrm/core": "self.version",
+        "laravel/framework": "^11.0 || ^12.0 || ^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Focal\\Sales\\": "src/",
+            "Focal\\Sales\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Focal\\Sales\\SalesServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

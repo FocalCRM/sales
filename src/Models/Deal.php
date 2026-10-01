@@ -1,0 +1,347 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Focal\Sales\Models;
+
+use Carbon\CarbonInterface;
+use Focal\Core\Models\Company;
+use Focal\Core\Models\Contact;
+use Focal\Core\Support\UserModel;
+use Focal\Core\Traits\AuditsProperties;
+use Focal\Core\Traits\BelongsToTeam;
+use Focal\Core\Traits\HasActivities;
+use Focal\Core\Traits\HasAssociations;
+use Focal\Core\Traits\HasCustomProperties;
+use Focal\Sales\Actions\CalculateDealHealthScoreAction;
+use Focal\Sales\Actions\ChangeDealStageAction;
+use Focal\Sales\Actions\SyncDealAmountAction;
+use Focal\Sales\Database\Factories\DealFactory;
+use Focal\Sales\Enums\DealStatus;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use RuntimeException;
+
+/**
+ * @property int $id
+ * @property int $pipeline_id
+ * @property int $stage_id
+ * @property string $name
+ * @property float $amount
+ * @property string $currency
+ * @property DealStatus $status
+ * @property CarbonInterface|null $expected_close_date
+ * @property CarbonInterface|null $closed_at
+ * @property string|null $lost_reason
+ * @property string|null $lost_notes
+ * @property array<string, mixed>|null $properties
+ * @property int|null $owner_id
+ * @property int|null $team_id
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ * @property CarbonInterface|null $deleted_at
+ * @property-read Pipeline $pipeline
+ * @property-read PipelineStage $stage
+ * @property-read Collection<int, DealProduct> $products
+ * @property-read Collection<int, Quote> $quotes
+ */
+class Deal extends Model
+{
+    use AuditsProperties;
+    use BelongsToTeam;
+    use HasActivities;
+    use HasAssociations;
+    use HasCustomProperties;
+
+    /** @use HasFactory<DealFactory> */
+    use HasFactory;
+
+    use SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'pipeline_id',
+        'stage_id',
+        'name',
+        'amount',
+        'currency',
+        'status',
+        'expected_close_date',
+        'closed_at',
+        'lost_reason',
+        'lost_notes',
+        'properties',
+        'owner_id',
+        'team_id',
+    ];
+
+    /**
+     * Get the table associated with the model.
+     */
+    public function getTable(): string
+    {
+        return config('focal-sales.tables.deals', 'focal_deals');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:2',
+            'status' => DealStatus::class,
+            'expected_close_date' => 'date',
+            'closed_at' => 'datetime',
+            'properties' => 'array',
+        ];
+    }
+
+    /**
+     * The pipeline this deal belongs to.
+     *
+     * @return BelongsTo<Pipeline, $this>
+     */
+    public function pipeline(): BelongsTo
+    {
+        return $this->belongsTo(Pipeline::class, 'pipeline_id');
+    }
+
+    /**
+     * The current stage of this deal.
+     *
+     * @return BelongsTo<PipelineStage, $this>
+     */
+    public function stage(): BelongsTo
+    {
+        return $this->belongsTo(PipelineStage::class, 'stage_id');
+    }
+
+    /**
+     * The sales rep / user who owns this deal.
+     *
+     * @return BelongsTo<Model, $this>
+     */
+    public function owner(): BelongsTo
+    {
+        $userModel = UserModel::className();
+
+        return $this->belongsTo($userModel, 'owner_id');
+    }
+
+    /**
+     * History of stage movements for this deal.
+     *
+     * @return HasMany<DealStageHistory, $this>
+     */
+    public function stageHistory(): HasMany
+    {
+        return $this->hasMany(DealStageHistory::class, 'deal_id')->orderBy('entered_at', 'desc');
+    }
+
+    /**
+     * Contacts associated with this deal.
+     *
+     * @return BelongsToMany<Contact, $this>
+     */
+    public function contacts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Contact::class,
+            config('focal-core.tables.associations', 'focal_associations'),
+            'parent_id',
+            'child_id'
+        )
+            ->wherePivot('parent_type', $this->getMorphClass())
+            ->wherePivot('child_type', (new Contact)->getMorphClass())
+            ->withPivot(['id', 'type'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Companies associated with this deal.
+     *
+     * @return BelongsToMany<Company, $this>
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Company::class,
+            config('focal-core.tables.associations', 'focal_associations'),
+            'parent_id',
+            'child_id'
+        )
+            ->wherePivot('parent_type', $this->getMorphClass())
+            ->wherePivot('child_type', (new Company)->getMorphClass())
+            ->withPivot(['id', 'type'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Product line items attached to this deal.
+     *
+     * @return HasMany<DealProduct, $this>
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(DealProduct::class, 'deal_id')->orderBy('sort_order');
+    }
+
+    /**
+     * Quotes generated for this deal.
+     *
+     * @return HasMany<Quote, $this>
+     */
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(Quote::class, 'deal_id')->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Synchronize the aggregate deal amount from line items.
+     */
+    public function syncAmountFromProducts(): self
+    {
+        app(SyncDealAmountAction::class)->execute($this);
+
+        return $this;
+    }
+
+    /**
+     * Number of days this deal has spent in its current stage.
+     */
+    public function daysInCurrentStage(): int
+    {
+        /** @var DealStageHistory|null $latestHistory */
+        $latestHistory = $this->stageHistory->first() ?? $this->stageHistory()->first();
+        $enteredAt = $latestHistory !== null ? $latestHistory->entered_at : ($this->created_at ?? now());
+
+        return (int) $enteredAt->diffInDays(now());
+    }
+
+    /**
+     * Determine if the deal is rotting / idle past the stage's threshold.
+     */
+    public function isRotten(): bool
+    {
+        if (! $this->status->isOpen()) {
+            return false;
+        }
+
+        $rotDays = $this->stage->rot_after_days;
+
+        if ($rotDays === null || $rotDays <= 0) {
+            return false;
+        }
+
+        return $this->daysInCurrentStage() >= $rotDays;
+    }
+
+    /**
+     * Calculate the deal health & win probability score (0-100).
+     *
+     * @return array{
+     *     score: int,
+     *     status: 'strong'|'moderate'|'at_risk'|'stalled',
+     *     badge_label: string,
+     *     badge_color: string,
+     *     factors: list<array{name: string, points: int, positive: bool, description: string}>,
+     *     recommendations: list<string>
+     * }
+     */
+    public function getHealthScore(): array
+    {
+        return app(CalculateDealHealthScoreAction::class)->execute($this);
+    }
+
+    /**
+     * Move deal to another stage.
+     */
+    public function moveToStage(PipelineStage $stage, int|string|null $userId = null, ?string $lostReason = null, ?string $lostNotes = null): self
+    {
+        return app(ChangeDealStageAction::class)->execute($this, $stage, $userId, $lostReason, $lostNotes);
+    }
+
+    /**
+     * Mark deal as Won.
+     */
+    public function markWon(int|string|null $userId = null): self
+    {
+        /** @var PipelineStage|null $wonStage */
+        $wonStage = $this->pipeline->stages()->where('is_closed_won', true)->first();
+
+        if ($wonStage === null) {
+            throw new RuntimeException("Pipeline [{$this->pipeline->name}] has no closed won stage defined.");
+        }
+
+        return $this->moveToStage($wonStage, $userId);
+    }
+
+    /**
+     * Mark deal as Lost with reason and optional notes.
+     */
+    public function markLost(?string $reason = null, int|string|null $userId = null, ?string $notes = null): self
+    {
+        /** @var PipelineStage|null $lostStage */
+        $lostStage = $this->pipeline->stages()->where('is_closed_lost', true)->first();
+
+        if ($lostStage === null) {
+            throw new RuntimeException("Pipeline [{$this->pipeline->name}] has no closed lost stage defined.");
+        }
+
+        return $this->moveToStage($lostStage, $userId, $reason, $notes);
+    }
+
+    /**
+     * Scope query to deals with open status.
+     *
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
+    public function scopeOpen(Builder $query): Builder
+    {
+        return $query->where('status', DealStatus::Open->value);
+    }
+
+    /**
+     * Scope query to deals with won status.
+     *
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
+    public function scopeWon(Builder $query): Builder
+    {
+        return $query->where('status', DealStatus::Won->value);
+    }
+
+    /**
+     * Scope query to deals with lost status.
+     *
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
+    public function scopeLost(Builder $query): Builder
+    {
+        return $query->where('status', DealStatus::Lost->value);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): DealFactory
+    {
+        return DealFactory::new();
+    }
+}

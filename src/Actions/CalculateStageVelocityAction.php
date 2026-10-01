@@ -1,0 +1,101 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Focal\Sales\Actions;
+
+use Focal\Sales\Models\Deal;
+use Focal\Sales\Models\DealStageHistory;
+use Focal\Sales\Models\PipelineStage;
+use Illuminate\Database\Eloquent\Collection;
+
+class CalculateStageVelocityAction
+{
+    /**
+     * Calculate sales cycle duration and average dwell time per stage.
+     *
+     * @return array{
+     *     average_sales_cycle_days: float,
+     *     stages: array<int, array{
+     *         stage_id: int,
+     *         stage_name: string,
+     *         probability: int,
+     *         average_dwell_days: float,
+     *         transition_count: int,
+     *         stale_deal_count: int
+     *     }>
+     * }
+     */
+    public function execute(?int $pipelineId = null): array
+    {
+        $stagesQuery = PipelineStage::query()->orderBy('sort_order');
+
+        if ($pipelineId !== null) {
+            $stagesQuery->where('pipeline_id', $pipelineId);
+        }
+
+        $stages = $stagesQuery->get();
+
+        $stageMetrics = [];
+
+        foreach ($stages as $stage) {
+            /** @var float|null $avgSeconds */
+            $avgSeconds = DealStageHistory::query()
+                ->where('to_stage_id', $stage->id)
+                ->whereNotNull('duration_in_stage_seconds')
+                ->avg('duration_in_stage_seconds');
+
+            $count = DealStageHistory::query()
+                ->where('to_stage_id', $stage->id)
+                ->count();
+
+            // Count open deals that have exceeded rot_after_days (stale deals)
+            $staleCount = 0;
+            if ($stage->rot_after_days !== null && $stage->rot_after_days > 0) {
+                /** @var Collection<int, Deal> $activeDeals */
+                $activeDeals = $stage->deals()->where('status', 'open')->get();
+                foreach ($activeDeals as $deal) {
+                    if ($deal->daysInCurrentStage() >= $stage->rot_after_days) {
+                        $staleCount++;
+                    }
+                }
+            }
+
+            $avgDays = $avgSeconds !== null ? round($avgSeconds / 86400, 1) : 0.0;
+
+            $stageMetrics[$stage->id] = [
+                'stage_id' => $stage->id,
+                'stage_name' => $stage->name,
+                'probability' => $stage->probability,
+                'average_dwell_days' => $avgDays,
+                'transition_count' => $count,
+                'stale_deal_count' => $staleCount,
+            ];
+        }
+
+        // Calculate average sales cycle for won deals
+        $wonDealsQuery = Deal::query()->where('status', 'won')->whereNotNull('closed_at');
+
+        if ($pipelineId !== null) {
+            $wonDealsQuery->where('pipeline_id', $pipelineId);
+        }
+
+        $wonDeals = $wonDealsQuery->get();
+        $totalCycleDays = 0.0;
+        $wonWithDates = 0;
+
+        foreach ($wonDeals as $wonDeal) {
+            if ($wonDeal->created_at !== null && $wonDeal->closed_at !== null) {
+                $totalCycleDays += $wonDeal->created_at->diffInDays($wonDeal->closed_at);
+                $wonWithDates++;
+            }
+        }
+
+        $avgSalesCycle = $wonWithDates > 0 ? round($totalCycleDays / $wonWithDates, 1) : 0.0;
+
+        return [
+            'average_sales_cycle_days' => $avgSalesCycle,
+            'stages' => $stageMetrics,
+        ];
+    }
+}

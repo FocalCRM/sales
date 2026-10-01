@@ -1,0 +1,205 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Focal\Sales\Models;
+
+use Carbon\CarbonInterface;
+use Focal\Core\Support\UserModel;
+use Focal\Sales\Database\Factories\QuoteFactory;
+use Focal\Sales\Enums\QuoteStatus;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+
+/**
+ * @property int $id
+ * @property int $deal_id
+ * @property string $quote_number
+ * @property string $title
+ * @property QuoteStatus $status
+ * @property float $subtotal
+ * @property float $discount_amount
+ * @property float $tax_amount
+ * @property float $total_amount
+ * @property string $currency
+ * @property string|null $terms
+ * @property string|null $notes
+ * @property string $public_token
+ * @property CarbonInterface|null $expires_at
+ * @property CarbonInterface|null $accepted_at
+ * @property string|null $signed_by_name
+ * @property string|null $signed_by_email
+ * @property int|null $user_id
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ * @property CarbonInterface|null $deleted_at
+ * @property-read Deal $deal
+ * @property-read Collection<int, QuoteItem> $items
+ */
+class Quote extends Model
+{
+    /** @use HasFactory<QuoteFactory> */
+    use HasFactory;
+
+    use SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'deal_id',
+        'quote_number',
+        'title',
+        'status',
+        'subtotal',
+        'discount_amount',
+        'tax_amount',
+        'total_amount',
+        'currency',
+        'terms',
+        'notes',
+        'public_token',
+        'expires_at',
+        'accepted_at',
+        'signed_by_name',
+        'signed_by_email',
+        'user_id',
+    ];
+
+    /**
+     * Get the table associated with the model.
+     */
+    public function getTable(): string
+    {
+        return config('focal-sales.tables.quotes', 'focal_quotes');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'status' => QuoteStatus::class,
+            'subtotal' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
+            'tax_amount' => 'decimal:2',
+            'total_amount' => 'decimal:2',
+            'expires_at' => 'date',
+            'accepted_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Bootstrap the model and its events.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (self $quote): void {
+            if (empty($quote->public_token)) {
+                $quote->public_token = Str::random(40);
+            }
+
+            if (empty($quote->quote_number)) {
+                $quote->quote_number = 'Q-'.now()->format('Y').'-'.strtoupper(Str::random(5));
+            }
+        });
+    }
+
+    /**
+     * The deal this quote belongs to.
+     *
+     * @return BelongsTo<Deal, $this>
+     */
+    public function deal(): BelongsTo
+    {
+        return $this->belongsTo(Deal::class, 'deal_id');
+    }
+
+    /**
+     * Line items on this quote.
+     *
+     * @return HasMany<QuoteItem, $this>
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(QuoteItem::class, 'quote_id')->orderBy('sort_order');
+    }
+
+    /**
+     * The creator / sales rep for this quote.
+     *
+     * @return BelongsTo<Model, $this>
+     */
+    public function user(): BelongsTo
+    {
+        $userModel = UserModel::className();
+
+        return $this->belongsTo($userModel, 'user_id');
+    }
+
+    /**
+     * Recalculate totals from quote items.
+     */
+    public function recalculateTotals(): self
+    {
+        $subtotal = (float) $this->items()->sum('total_price');
+        $net = max(0, $subtotal - (float) $this->discount_amount);
+        $total = $net + (float) $this->tax_amount;
+
+        $this->updateQuietly([
+            'subtotal' => round($subtotal, 2),
+            'total_amount' => round($total, 2),
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Check if the quote has expired.
+     */
+    public function isExpired(): bool
+    {
+        if ($this->status === QuoteStatus::Accepted) {
+            return false;
+        }
+
+        if ($this->expires_at === null) {
+            return false;
+        }
+
+        return $this->expires_at->isPast();
+    }
+
+    /**
+     * Accept the quote and record digital signature.
+     */
+    public function accept(string $name, string $email): self
+    {
+        $this->update([
+            'status' => QuoteStatus::Accepted,
+            'accepted_at' => now(),
+            'signed_by_name' => $name,
+            'signed_by_email' => $email,
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): QuoteFactory
+    {
+        return QuoteFactory::new();
+    }
+}

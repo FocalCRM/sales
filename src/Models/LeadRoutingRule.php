@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Focal\Sales\Models;
+
+use Carbon\CarbonInterface;
+use Focal\Sales\Enums\LeadRoutingStrategy;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property int $id
+ * @property string $name
+ * @property LeadRoutingStrategy $strategy
+ * @property array<string, mixed>|null $criteria
+ * @property list<int> $assigned_user_ids
+ * @property int $last_assigned_index
+ * @property bool $is_active
+ * @property int $sort_order
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ */
+class LeadRoutingRule extends Model
+{
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'strategy',
+        'criteria',
+        'assigned_user_ids',
+        'last_assigned_index',
+        'is_active',
+        'sort_order',
+    ];
+
+    /**
+     * Get the table associated with the model.
+     */
+    public function getTable(): string
+    {
+        return config('focal-sales.tables.lead_routing_rules', 'focal_sales_lead_routing_rules');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'strategy' => LeadRoutingStrategy::class,
+            'criteria' => 'array',
+            'assigned_user_ids' => 'array',
+            'last_assigned_index' => 'integer',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+        ];
+    }
+}
