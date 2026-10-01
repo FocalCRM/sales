@@ -36,8 +36,8 @@ The revenue and deal acceleration engine for the Focal RevOps platform. Delivers
 - **Multi-Pipeline Deal Management:** Manage complex sales cycles across multiple pipelines (e.g., *Enterprise New Business*, *Self-Serve Expansion*, *Channel Partners*) with distinct stages and probabilities.
 - **Stage Gate Enforcement:** Require specific fields or custom properties before advancing deals (e.g., require `decision_maker_identified` and `budget_confirmed` before moving to Proposal).
 - **Deal Rotting & Health Scoring:** Automatic calculation of deal vitality (0–100) based on stage stall duration, recent rep touchpoints, and upcoming scheduled activities.
-- **CPQ & Product Catalog:** Attach line-item products to deals with volume discounts, margin tracking, and auto-sync deal amounts. Generate branded PDF/web quotes with customer self-service acceptance.
-- **Automated Outbound Cadences (Sequences):** Multi-day, multi-channel cadences combining automated personalized emails, phone call reminders, and LinkedIn outreach tasks.
+- **CPQ & Product Catalog:** Attach line-item products to deals with volume discounts, margin tracking, and auto-sync deal amounts. Generate web quotes with customer self-service acceptance.
+- **Outbound Cadences (Sequences):** Multi-day cadences that schedule email, call, and LinkedIn steps for reps and log each step to the contact timeline. Email steps are logged as activities; sending them is not automated yet.
 - **Stage Automations:** Automatically trigger tasks, send internal alerts, update fields, or dispatch webhooks when deals transition across pipeline stages.
 - **Intelligent Lead & Deal Routing:** Route inbound records to reps using `RoundRobin`, `Weighted`, `Territory`, or `SkillBased` routing rules.
 - **Weighted Revenue Forecasting & Quotas:** Calculate real-time pipeline forecasts ($\sum \text{amount} \times \text{probability}$) and track rep quota attainment over monthly, quarterly, or annual periods.
