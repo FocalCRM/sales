@@ -1,5 +1,7 @@
 # Focal Sales (`focalcrm/sales`)
 
+> This is a read-only split of the [focalcrm/focal](https://github.com/focalcrm/focal) monorepo. Please open issues and pull requests there.
+
 The revenue and deal acceleration engine for the Focal RevOps platform. Delivers multi-pipeline Kanban tracking, CPQ quoting, automated outbound cadences, stage gate enforcement, weighted revenue forecasting, quota attainment, and intelligent lead routing.
 
 ---
