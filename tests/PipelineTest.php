@@ -6,7 +6,6 @@ namespace Focal\Sales\Tests;
 
 use Focal\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class PipelineTest extends TestCase
 {

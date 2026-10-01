@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Focal\Sales\Tests;
 
-use App\Models\User;
 use Carbon\Carbon;
 use Focal\Core\Enums\ActivityStatus;
 use Focal\Core\Enums\ActivityType;
@@ -35,8 +34,8 @@ use Focal\Sales\Models\SalesPlaybook;
 use Focal\Sales\Models\SalesQuota;
 use Focal\Sales\Models\SalesSequence;
 use Focal\Sales\Models\StageAutomation;
+use Focal\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class SalesHardeningTest extends TestCase
 {

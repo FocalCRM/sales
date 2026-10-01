@@ -9,7 +9,6 @@ use Focal\Sales\Actions\EnrollContactInSequenceAction;
 use Focal\Sales\Models\SalesSequence;
 use Focal\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class SalesSequenceTest extends TestCase
 {

@@ -10,7 +10,6 @@ use Focal\Sales\Models\Deal;
 use Focal\Sales\Models\Pipeline;
 use Focal\Sales\Models\Quote;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class QuoteAcceptanceTest extends TestCase
 {

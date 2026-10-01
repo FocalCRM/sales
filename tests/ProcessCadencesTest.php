@@ -12,7 +12,6 @@ use Focal\Sales\Actions\ProcessCadencesAction;
 use Focal\Sales\Models\SalesEmailTemplate;
 use Focal\Sales\Models\SalesSequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class ProcessCadencesTest extends TestCase
 {

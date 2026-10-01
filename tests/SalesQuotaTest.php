@@ -11,7 +11,6 @@ use Focal\Sales\Models\Deal;
 use Focal\Sales\Models\Pipeline;
 use Focal\Sales\Models\SalesQuota;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class SalesQuotaTest extends TestCase
 {

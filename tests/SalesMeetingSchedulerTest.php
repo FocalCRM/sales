@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Focal\Sales\Tests;
 
-use App\Models\User;
 use Focal\Core\Enums\ActivityType;
 use Focal\Core\Models\Contact;
 use Focal\Sales\Models\SalesMeetingLink;
+use Focal\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class SalesMeetingSchedulerTest extends TestCase
 {

@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Focal\Sales\Tests;
 
-use App\Models\User;
 use Focal\Core\Enums\ActivityType;
 use Focal\Core\Enums\LeadStatus;
 use Focal\Core\Models\Contact;
 use Focal\Sales\Actions\RouteLeadAction;
 use Focal\Sales\Enums\LeadRoutingStrategy;
 use Focal\Sales\Models\LeadRoutingRule;
+use Focal\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class LeadRoutingTest extends TestCase
 {

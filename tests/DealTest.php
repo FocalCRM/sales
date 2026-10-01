@@ -14,7 +14,6 @@ use Focal\Sales\Models\Deal;
 use Focal\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
 
 class DealTest extends TestCase
 {

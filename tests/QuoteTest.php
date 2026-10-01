@@ -11,7 +11,6 @@ use Focal\Sales\Models\DealProduct;
 use Focal\Sales\Models\Pipeline;
 use Focal\Sales\Models\Quote;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class QuoteTest extends TestCase
 {

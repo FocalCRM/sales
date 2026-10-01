@@ -8,7 +8,6 @@ use Focal\Sales\Actions\CalculateStageVelocityAction;
 use Focal\Sales\Models\Deal;
 use Focal\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class StageVelocityTest extends TestCase
 {

@@ -6,7 +6,6 @@ namespace Focal\Sales\Tests;
 
 use Focal\Sales\Models\SalesEmailTemplate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class SalesEmailTemplateTest extends TestCase
 {

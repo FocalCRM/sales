@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Focal\Sales\Tests;
 
-use App\Models\User;
 use Focal\Core\Enums\LeadStatus;
 use Focal\Core\Models\Company;
 use Focal\Core\Models\Contact;
 use Focal\Sales\Models\Deal;
 use Focal\Sales\Models\Pipeline;
 use Focal\Sales\Services\TemplateParser;
+use Focal\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class TemplateParserTest extends TestCase
 {
