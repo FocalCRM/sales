@@ -37,7 +37,7 @@ class ChangeDealStageAction
                 ->first();
 
             if ($lastHistory !== null) {
-                $duration = $now->diffInSeconds($lastHistory->entered_at);
+                $duration = (int) $lastHistory->entered_at->diffInSeconds($now);
                 $lastHistory->update([
                     'exited_at' => $now,
                     'duration_in_stage_seconds' => $duration,

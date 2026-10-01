@@ -13,6 +13,23 @@ class DealStageHistoryTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_time_in_stage_is_recorded_as_positive_whole_seconds(): void
+    {
+        $pipeline = Pipeline::factory()->withStages()->create();
+        [$first, $second, $third] = [$pipeline->stages[0], $pipeline->stages[1], $pipeline->stages[2]];
+        $deal = Deal::factory()->create(['pipeline_id' => $pipeline->id, 'stage_id' => $first->id]);
+
+        $this->travelTo(now()->startOfMinute());
+        $deal->moveToStage($second);
+
+        $this->travel(90)->minutes();
+        $deal->moveToStage($third);
+
+        $closed = DealStageHistory::query()->where('deal_id', $deal->id)->where('to_stage_id', $second->id)->firstOrFail();
+
+        $this->assertSame(5400, $closed->duration_in_stage_seconds);
+    }
+
     public function test_moving_deal_between_stages_tracks_duration_and_history(): void
     {
         $pipeline = Pipeline::factory()->withStages()->create();
