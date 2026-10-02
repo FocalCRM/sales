@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Odden\Sales\Tests;
 
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Enums\ActivityStatus;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Models\Activity;
@@ -36,7 +37,6 @@ use Odden\Sales\Models\SalesSequence;
 use Odden\Sales\Models\StageAutomation;
 use Odden\Sales\Services\MeetingAvailability;
 use Odden\Sales\Tests\Fixtures\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesHardeningTest extends TestCase
 {

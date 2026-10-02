@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
-use Odden\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Odden\Sales\Models\Pipeline;
 
 class PipelineTest extends TestCase
 {

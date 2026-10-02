@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Console\Commands;
 
+use Illuminate\Console\Command;
 use Odden\Sales\Enums\QuoteStatus;
 use Odden\Sales\Models\Quote;
-use Illuminate\Console\Command;
 
 class ExpireStaleQuotesCommand extends Command
 {

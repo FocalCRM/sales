@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
-use Odden\Sales\Models\SalesEmailTemplate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Odden\Sales\Models\SalesEmailTemplate;
 
 class SalesEmailTemplateTest extends TestCase
 {

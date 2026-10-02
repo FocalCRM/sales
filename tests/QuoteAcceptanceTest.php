@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Exceptions;
 use Odden\Sales\Actions\AcceptQuoteAction;
 use Odden\Sales\Enums\DealStatus;
 use Odden\Sales\Enums\QuoteStatus;
@@ -15,8 +17,6 @@ use Odden\Sales\Models\Pipeline;
 use Odden\Sales\Models\PipelineStage;
 use Odden\Sales\Models\Quote;
 use Odden\Sales\Models\StageAutomation;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Exceptions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class QuoteAcceptanceTest extends TestCase

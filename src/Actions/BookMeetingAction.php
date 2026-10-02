@@ -6,6 +6,8 @@ namespace Odden\Sales\Actions;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Odden\Core\Enums\ActivityStatus;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Enums\LeadStatus;
@@ -19,8 +21,6 @@ use Odden\Sales\Models\SalesMeetingBooking;
 use Odden\Sales\Models\SalesMeetingLink;
 use Odden\Sales\Models\SalesSequenceEnrollment;
 use Odden\Sales\Services\MeetingAvailability;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class BookMeetingAction
 {

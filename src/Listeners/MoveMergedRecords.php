@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Listeners;
 
-use Odden\Core\Events\ContactsMerged;
 use Illuminate\Support\Facades\DB;
+use Odden\Core\Events\ContactsMerged;
 
 /**
  * Moves the Sales records keyed to a merged-away contact onto the contact it was merged into.

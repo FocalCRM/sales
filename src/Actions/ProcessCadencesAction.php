@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Odden\Core\Enums\ActivityStatus;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Enums\LeadStatus;
@@ -13,9 +16,6 @@ use Odden\Sales\Mail\SalesMail;
 use Odden\Sales\Mail\SequenceStepMail;
 use Odden\Sales\Models\SalesEmailTemplate;
 use Odden\Sales\Models\SalesSequenceEnrollment;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class ProcessCadencesAction
 {

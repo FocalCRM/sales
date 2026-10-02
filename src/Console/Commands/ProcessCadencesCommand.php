@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Console\Commands;
 
-use Odden\Sales\Actions\ProcessCadencesAction;
 use Illuminate\Console\Command;
+use Odden\Sales\Actions\ProcessCadencesAction;
 
 class ProcessCadencesCommand extends Command
 {

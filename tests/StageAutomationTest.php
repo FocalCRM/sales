@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Models\Contact;
 use Odden\Sales\Enums\StageAutomationActionType;
 use Odden\Sales\Exceptions\StageRequirementException;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\Pipeline;
 use Odden\Sales\Models\StageAutomation;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StageAutomationTest extends TestCase
 {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Odden\Core\Models\Company;
 use Odden\Core\Models\Contact;
 use Odden\Sales\Enums\DealStatus;
@@ -12,8 +14,6 @@ use Odden\Sales\Events\DealMovedStage;
 use Odden\Sales\Events\DealWon;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\Pipeline;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 
 class DealTest extends TestCase
 {

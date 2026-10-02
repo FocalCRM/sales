@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\DealStageHistory;
 use Odden\Sales\Models\PipelineStage;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<DealStageHistory>

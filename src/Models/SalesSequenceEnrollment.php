@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Odden\Core\Models\Contact;
-use Odden\Core\Support\UserModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
 
 /**
  * @property int $id

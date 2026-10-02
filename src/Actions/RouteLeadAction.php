@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Database\Eloquent\Collection;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Models\Contact;
 use Odden\Core\Support\UserModel;
@@ -11,7 +12,6 @@ use Odden\Sales\Enums\LeadRoutingStrategy;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\LeadRoutingRule;
 use Odden\Sales\Models\SalesQuota;
-use Illuminate\Database\Eloquent\Collection;
 
 class RouteLeadAction
 {

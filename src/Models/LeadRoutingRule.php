@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Odden\Sales\Enums\LeadRoutingStrategy;
 use Illuminate\Database\Eloquent\Model;
+use Odden\Sales\Enums\LeadRoutingStrategy;
 
 /**
  * @property int $id

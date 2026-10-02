@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Support\Facades\DB;
 use Odden\Sales\Enums\DealStatus;
 use Odden\Sales\Events\DealLost;
 use Odden\Sales\Events\DealMovedStage;
@@ -12,7 +13,6 @@ use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\DealStageHistory;
 use Odden\Sales\Models\PipelineStage;
 use Odden\Sales\Models\SalesSequenceEnrollment;
-use Illuminate\Support\Facades\DB;
 
 class ChangeDealStageAction
 {

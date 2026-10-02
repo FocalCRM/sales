@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use Odden\Core\Models\Company;
 use Odden\Core\Models\Contact;
 use Odden\Core\Support\UserModel;
@@ -22,7 +23,6 @@ use Odden\Sales\Models\SalesMeetingLink;
 use Odden\Sales\Models\SalesPlaybook;
 use Odden\Sales\Models\SalesSequence;
 use Odden\Sales\Models\SalesSequenceEnrollment;
-use Illuminate\Database\Seeder;
 
 class SalesDatabaseSeeder extends Seeder
 {

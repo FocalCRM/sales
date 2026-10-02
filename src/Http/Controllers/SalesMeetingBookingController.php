@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Odden\Sales\Http\Controllers;
 
 use Carbon\CarbonImmutable;
-use Odden\Sales\Actions\BookMeetingAction;
-use Odden\Sales\Exceptions\MeetingSlotUnavailableException;
-use Odden\Sales\Models\SalesMeetingLink;
-use Odden\Sales\Services\MeetingAvailability;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Odden\Sales\Actions\BookMeetingAction;
+use Odden\Sales\Exceptions\MeetingSlotUnavailableException;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Services\MeetingAvailability;
 
 class SalesMeetingBookingController extends Controller
 {

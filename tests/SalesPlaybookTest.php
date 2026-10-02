@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Enums\ActivityType;
 use Odden\Sales\Actions\ExecuteSalesPlaybookAction;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\Pipeline;
 use Odden\Sales\Models\SalesPlaybook;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesPlaybookTest extends TestCase
 {

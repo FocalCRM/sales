@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Odden\Core\Models\Company;
 use Odden\Core\Models\Contact;
 use Odden\Sales\Models\Deal;
-use Illuminate\Database\Eloquent\Model;
 
 class TemplateParser
 {

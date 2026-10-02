@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Support\Facades\DB;
 use Odden\Core\Enums\ActivityType;
 use Odden\Sales\Enums\DealStatus;
 use Odden\Sales\Enums\QuoteStatus;
 use Odden\Sales\Exceptions\QuoteNotAcceptableException;
 use Odden\Sales\Models\PipelineStage;
 use Odden\Sales\Models\Quote;
-use Illuminate\Support\Facades\DB;
 
 class AcceptQuoteAction
 {

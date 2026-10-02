@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
 use Odden\Core\Support\RouteGroup;
 use Odden\Sales\Http\Controllers\QuoteAcceptanceController;
 use Odden\Sales\Http\Controllers\SalesMeetingBookingController;
-use Illuminate\Support\Facades\Route;
 
 Route::group(RouteGroup::attributes('odden-sales.routes.web'), function (): void {
     // Quotes public e-sign portal

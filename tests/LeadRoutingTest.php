@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Enums\LeadStatus;
 use Odden\Core\Models\Contact;
@@ -11,7 +12,6 @@ use Odden\Sales\Actions\RouteLeadAction;
 use Odden\Sales\Enums\LeadRoutingStrategy;
 use Odden\Sales\Models\LeadRoutingRule;
 use Odden\Sales\Tests\Fixtures\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LeadRoutingTest extends TestCase
 {

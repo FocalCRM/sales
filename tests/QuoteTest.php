@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Sales\Actions\GenerateQuoteFromDealAction;
 use Odden\Sales\Enums\QuoteStatus;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\DealProduct;
 use Odden\Sales\Models\Pipeline;
 use Odden\Sales\Models\Quote;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class QuoteTest extends TestCase
 {

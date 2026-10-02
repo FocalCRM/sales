@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Odden\Sales\Actions;
 
 use Carbon\CarbonInterface;
+use Illuminate\Support\Facades\DB;
 use Odden\Sales\Enums\QuoteStatus;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\Quote;
 use Odden\Sales\Models\QuoteItem;
-use Illuminate\Support\Facades\DB;
 
 class GenerateQuoteFromDealAction
 {

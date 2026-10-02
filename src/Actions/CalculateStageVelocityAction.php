@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Database\Eloquent\Collection;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\DealStageHistory;
 use Odden\Sales\Models\PipelineStage;
-use Illuminate\Database\Eloquent\Collection;
 
 class CalculateStageVelocityAction
 {

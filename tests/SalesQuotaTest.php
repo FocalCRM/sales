@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Sales\Actions\CalculateQuotaAttainmentAction;
 use Odden\Sales\Enums\DealStatus;
 use Odden\Sales\Enums\QuotaPeriod;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\Pipeline;
 use Odden\Sales\Models\SalesQuota;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesQuotaTest extends TestCase
 {

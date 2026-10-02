@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Mail;
 
-use Odden\Core\Support\UserModel;
-use Odden\Sales\Models\SalesMeetingBooking;
-use Odden\Sales\Services\MeetingInvite;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -15,6 +12,9 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Models\SalesMeetingBooking;
+use Odden\Sales\Services\MeetingInvite;
 
 /**
  * Confirmation of a booked meeting, with an .ics invite. Sent to the invitee and to the host.

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Database\Eloquent\Collection;
 use Odden\Sales\Enums\QuoteStatus;
 use Odden\Sales\Enums\StageAutomationActionType;
 use Odden\Sales\Exceptions\StageRequirementException;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\PipelineStage;
 use Odden\Sales\Models\StageAutomation;
-use Illuminate\Database\Eloquent\Collection;
 
 class ExecuteStageAutomationsAction
 {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Events;
 
-use Odden\Sales\Models\Deal;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Odden\Sales\Models\Deal;
 
 class DealLost
 {

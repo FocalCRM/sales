@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Odden\Core\Support\UserModel;
-use Odden\Sales\Database\Factories\DealStageHistoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Database\Factories\DealStageHistoryFactory;
 
 /**
  * @property int $id

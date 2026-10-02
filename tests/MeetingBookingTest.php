@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\MailManager;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Models\Activity;
 use Odden\Core\Models\Contact;
@@ -13,10 +17,6 @@ use Odden\Sales\Models\SalesMeetingLink;
 use Odden\Sales\Services\MeetingAvailability;
 use Odden\Sales\Services\MeetingInvite;
 use Odden\Sales\Tests\Fixtures\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\MailManager;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Mail;
 
 beforeEach(function (): void {
     config(['app.timezone' => 'UTC']);

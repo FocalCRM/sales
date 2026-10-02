@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Odden\Core\Support\UserModel;
-use Odden\Sales\Enums\QuotaPeriod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Enums\QuotaPeriod;
 
 /**
  * @property int $id

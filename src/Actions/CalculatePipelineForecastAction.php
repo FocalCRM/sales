@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Actions;
 
+use Illuminate\Database\Eloquent\Collection;
 use Odden\Sales\Enums\DealStatus;
 use Odden\Sales\Models\Deal;
-use Illuminate\Database\Eloquent\Collection;
 
 class CalculatePipelineForecastAction
 {

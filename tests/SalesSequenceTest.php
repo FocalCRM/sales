@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Models\Contact;
 use Odden\Sales\Actions\EnrollContactInSequenceAction;
 use Odden\Sales\Models\SalesSequence;
 use Odden\Sales\Models\SalesSequenceEnrollment;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesSequenceTest extends TestCase
 {

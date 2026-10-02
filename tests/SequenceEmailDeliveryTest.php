@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\MailManager;
+use Illuminate\Support\Facades\Mail;
 use Odden\Core\Enums\ActivityStatus;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Models\Activity;
@@ -13,9 +16,6 @@ use Odden\Sales\Models\SalesEmailTemplate;
 use Odden\Sales\Models\SalesSequence;
 use Odden\Sales\Models\SalesSequenceEnrollment;
 use Odden\Sales\Tests\Fixtures\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\MailManager;
-use Illuminate\Support\Facades\Mail;
 
 beforeEach(function (): void {
     Mail::fake();

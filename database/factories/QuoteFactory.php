@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Odden\Sales\Enums\QuoteStatus;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\Quote;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Quote>

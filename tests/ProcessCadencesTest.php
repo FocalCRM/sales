@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Enums\ActivityType;
 use Odden\Core\Enums\LeadStatus;
 use Odden\Core\Models\Contact;
@@ -11,7 +12,6 @@ use Odden\Sales\Actions\EnrollContactInSequenceAction;
 use Odden\Sales\Actions\ProcessCadencesAction;
 use Odden\Sales\Models\SalesEmailTemplate;
 use Odden\Sales\Models\SalesSequence;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProcessCadencesTest extends TestCase
 {

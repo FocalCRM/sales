@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Odden\Sales\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Odden\Core\Enums\LeadStatus;
 use Odden\Core\Models\Company;
 use Odden\Core\Models\Contact;
@@ -12,7 +13,6 @@ use Odden\Sales\Models\Pipeline;
 use Odden\Sales\Models\SalesEmailTemplate;
 use Odden\Sales\Services\TemplateParser;
 use Odden\Sales\Tests\Fixtures\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TemplateParserTest extends TestCase
 {

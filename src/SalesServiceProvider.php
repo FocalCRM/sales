@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Odden\Sales;
 
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
 use Odden\Core\Events\ContactsMerged;
 use Odden\Core\Models\Company;
 use Odden\Core\Models\Contact;
@@ -12,8 +14,6 @@ use Odden\Sales\Console\Commands\ProcessCadencesCommand;
 use Odden\Sales\Listeners\MoveMergedRecords;
 use Odden\Sales\Models\Deal;
 use Odden\Sales\Models\SalesSequenceEnrollment;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\ServiceProvider;
 
 class SalesServiceProvider extends ServiceProvider
 {

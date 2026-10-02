@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Odden\Core\Models\Activity;
-use Odden\Core\Models\Contact;
-use Odden\Core\Support\UserModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Odden\Core\Models\Activity;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
 
 /**
  * A slot booked on a meeting link. Active (not cancelled) bookings block the host's calendar.
