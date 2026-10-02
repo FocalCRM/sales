@@ -6,6 +6,7 @@ namespace Focal\Sales\Models;
 
 use Carbon\CarbonInterface;
 use Focal\Core\Models\Contact;
+use Focal\Core\Support\UserModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonInterface|null $updated_at
  * @property-read SalesSequence $sequence
  * @property-read Contact $contact
+ * @property-read Model|null $enrolledBy
  */
 class SalesSequenceEnrollment extends Model
 {
@@ -80,31 +82,72 @@ class SalesSequenceEnrollment extends Model
     }
 
     /**
+     * The user who enrolled the contact (the sequence's "owner" for this contact).
+     *
+     * @return BelongsTo<Model, $this>
+     */
+    public function enrolledBy(): BelongsTo
+    {
+        return $this->belongsTo(UserModel::className(), 'enrolled_by_id');
+    }
+
+    /**
      * Advance to the next sequence step or complete if on final step.
      */
     public function advanceStep(): self
     {
-        $totalSteps = $this->sequence->totalSteps();
-
-        if ($this->current_step >= $totalSteps) {
-            $this->update([
-                'status' => 'completed',
-                'next_step_due_at' => null,
-            ]);
-
-            return $this;
-        }
-
-        $nextStepIndex = $this->current_step; // 0-based for the next step
-        $steps = $this->sequence->steps ?? [];
-        $nextStepDef = $steps[$nextStepIndex] ?? null;
-        $delayDays = $nextStepDef !== null ? $nextStepDef['delay_days'] : 1;
-
-        $this->update([
-            'current_step' => $this->current_step + 1,
-            'next_step_due_at' => now()->addDays($delayDays)->toDateString(),
-        ]);
+        $this->update($this->nextStepAttributes());
 
         return $this;
+    }
+
+    /**
+     * Atomically advance past $step, but only if this enrollment is still active and on that step.
+     *
+     * Returns false when another process has already moved it on (or unenrolled it), so callers can
+     * run a step's side effects exactly once.
+     */
+    public function claimStep(int $step): bool
+    {
+        $attributes = $this->nextStepAttributes($step);
+        $updatedAt = $this->getUpdatedAtColumn();
+        if ($updatedAt !== null) {
+            $attributes[$updatedAt] = $this->freshTimestampString();
+        }
+
+        $claimed = static::query()
+            ->whereKey($this->getKey())
+            ->where('status', 'active')
+            ->where('current_step', $step)
+            ->update($attributes) === 1;
+
+        $this->refresh();
+
+        return $claimed;
+    }
+
+    /**
+     * @return array{status?: string, current_step?: int, next_step_due_at: string|null}
+     */
+    protected function nextStepAttributes(?int $fromStep = null): array
+    {
+        $fromStep ??= $this->current_step;
+        $totalSteps = $this->sequence->totalSteps();
+
+        if ($fromStep >= $totalSteps) {
+            return [
+                'status' => 'completed',
+                'next_step_due_at' => null,
+            ];
+        }
+
+        $steps = $this->sequence->steps ?? [];
+        $nextStepDef = $steps[$fromStep] ?? null; // 0-based index of the next step
+        $delayDays = $nextStepDef !== null ? $nextStepDef['delay_days'] : 1;
+
+        return [
+            'current_step' => $fromStep + 1,
+            'next_step_due_at' => now()->addDays($delayDays)->toDateString(),
+        ];
     }
 }

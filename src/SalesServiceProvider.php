@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Focal\Sales;
 
+use Focal\Core\Events\ContactsMerged;
 use Focal\Core\Models\Company;
 use Focal\Core\Models\Contact;
 use Focal\Sales\Console\Commands\ExpireStaleQuotesCommand;
 use Focal\Sales\Console\Commands\ProcessCadencesCommand;
+use Focal\Sales\Listeners\MoveMergedRecords;
 use Focal\Sales\Models\Deal;
 use Focal\Sales\Models\SalesSequenceEnrollment;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class SalesServiceProvider extends ServiceProvider
@@ -69,6 +72,9 @@ class SalesServiceProvider extends ServiceProvider
                     ->withTimestamps();
             });
         }
+
+        // Synchronous on purpose: runs inside Core's merge transaction.
+        Event::listen(ContactsMerged::class, [MoveMergedRecords::class, 'handleContactsMerged']);
 
         if ($this->app->runningInConsole()) {
             $this->commands([

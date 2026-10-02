@@ -174,6 +174,53 @@
             background: #0f766e;
         }
 
+        .alert-error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 1rem 1.25rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .date-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .date-row .form-input {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            padding: 0.625rem 0.875rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .tz-note {
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .no-slots {
+            font-size: 0.875rem;
+            color: #64748b;
+            padding: 0.75rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 0.375rem;
+        }
+
+        .btn-book:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
         .alert-success {
             background: #dcfce7;
             color: #15803d;
@@ -201,7 +248,7 @@
             </div>
             <div class="meta-item">
                 <span>&#128197;</span>
-                <span>Web conference details provided upon confirmation</span>
+                <span>A confirmation email with a calendar invite follows your booking</span>
             </div>
 
             @if ($link->description)
@@ -219,44 +266,57 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div class="alert-error">
+                    @foreach ($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+                </div>
+            @endif
+
+            <form action="{{ route('focal.meetings.show', ['slug' => $link->slug]) }}" method="GET" class="form-group">
+                <label for="date">Select Date</label>
+                <div class="date-row">
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        class="form-input"
+                        value="{{ $date }}"
+                        min="{{ $minDate }}"
+                        max="{{ $maxDate }}"
+                        onchange="this.form.submit()"
+                        required
+                    >
+                    <button type="submit" class="btn-secondary">Show times</button>
+                </div>
+            </form>
+
             <form action="{{ route('focal.meetings.book', ['slug' => $link->slug]) }}" method="POST">
                 @csrf
+                <input type="hidden" name="date" value="{{ $date }}">
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     <div class="form-group">
-                        <label for="date">Select Date</label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="date"
-                            class="form-input"
-                            value="{{ old('date', now()->addDay()->toDateString()) }}"
-                            min="{{ now()->toDateString() }}"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label>Select Time Slot</label>
-                        @php
-                            $slots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];
-                        @endphp
-                        <div class="time-slots-grid">
-                            @foreach ($slots as $slot)
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="time"
-                                        value="{{ $slot }}"
-                                        class="slot-radio"
-                                        {{ $loop->first ? 'checked' : '' }}
-                                        required
-                                    >
-                                    <span class="slot-btn">
-                                        {{ \Carbon\Carbon::createFromFormat('H:i', $slot)->format('g:i A') }}
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
+                        <label>Select Time Slot <span class="tz-note">({{ $timezone }})</span></label>
+                        @if (count($slots) === 0)
+                            <div class="no-slots">No times are available on this date. Please pick another date.</div>
+                        @else
+                            <div class="time-slots-grid">
+                                @foreach ($slots as $slot)
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="time"
+                                            value="{{ $slot->format('H:i') }}"
+                                            class="slot-radio"
+                                            {{ old('time') === $slot->format('H:i') || (old('time') === null && $loop->first) ? 'checked' : '' }}
+                                            required
+                                        >
+                                        <span class="slot-btn">{{ $slot->format('g:i A') }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
 
                     <div class="form-group">
@@ -276,10 +336,10 @@
 
                     <div class="form-group">
                         <label for="notes">Meeting Objective / Notes (optional)</label>
-                        <textarea id="notes" name="notes" rows="2" class="form-input" placeholder="What would you like to cover?"></textarea>
+                        <textarea id="notes" name="notes" rows="2" class="form-input" placeholder="What would you like to cover?">{{ old('notes') }}</textarea>
                     </div>
 
-                    <button type="submit" class="btn-book">
+                    <button type="submit" class="btn-book" @disabled(count($slots) === 0)>
                         Confirm Meeting &rarr;
                     </button>
                 </div>

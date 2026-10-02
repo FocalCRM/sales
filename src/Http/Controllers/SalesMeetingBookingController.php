@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Focal\Sales\Http\Controllers;
 
+use Carbon\CarbonImmutable;
 use Focal\Sales\Actions\BookMeetingAction;
+use Focal\Sales\Exceptions\MeetingSlotUnavailableException;
 use Focal\Sales\Models\SalesMeetingLink;
+use Focal\Sales\Services\MeetingAvailability;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Carbon;
 
 class SalesMeetingBookingController extends Controller
 {
     /**
-     * Display rep's public meeting booking page.
+     * Display rep's public meeting booking page with the open slots for one date.
      */
-    public function show(string $slug): View
+    public function show(Request $request, string $slug, MeetingAvailability $availability): View
     {
         /** @var SalesMeetingLink $link */
         $link = SalesMeetingLink::query()
@@ -26,7 +28,25 @@ class SalesMeetingBookingController extends Controller
             ->with('user')
             ->firstOrFail();
 
-        return view('focal-sales::meetings.book', compact('link'));
+        $timezone = $link->timezoneName();
+        $today = CarbonImmutable::now($timezone)->format('Y-m-d');
+        $maxDate = $availability->lastBookableDate($link)->format('Y-m-d');
+
+        $requested = $request->query('date', old('date'));
+        $date = is_string($requested) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $requested) === 1
+            ? $requested
+            : ($availability->firstAvailableDate($link) ?? $today);
+
+        $slots = $availability->slotsFor($link, $date);
+
+        return view('focal-sales::meetings.book', [
+            'link' => $link,
+            'date' => $date,
+            'slots' => $slots,
+            'timezone' => $timezone,
+            'minDate' => $today,
+            'maxDate' => $maxDate,
+        ]);
     }
 
     /**
@@ -44,24 +64,37 @@ class SalesMeetingBookingController extends Controller
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:30'],
-            'date' => ['required', 'date', 'after_or_equal:today'],
-            'time' => ['required', 'string'],
+            'date' => ['required', 'date_format:Y-m-d'],
+            'time' => ['required', 'date_format:H:i'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $scheduledAt = Carbon::parse("{$validated['date']} {$validated['time']}");
+        $timezone = $link->timezoneName();
+        $scheduledAt = CarbonImmutable::createFromFormat('Y-m-d H:i', "{$validated['date']} {$validated['time']}", $timezone);
 
-        $action->execute(
-            link: $link,
-            fullName: (string) $validated['name'],
-            email: (string) $validated['email'],
-            scheduledAt: $scheduledAt,
-            phone: isset($validated['phone']) ? (string) $validated['phone'] : null,
-            notes: isset($validated['notes']) ? (string) $validated['notes'] : null
-        );
+        try {
+            if (! $scheduledAt instanceof CarbonImmutable) {
+                throw new MeetingSlotUnavailableException('Invalid meeting time.');
+            }
+
+            $result = $action->execute(
+                link: $link,
+                fullName: (string) $validated['name'],
+                email: (string) $validated['email'],
+                scheduledAt: $scheduledAt,
+                phone: isset($validated['phone']) ? (string) $validated['phone'] : null,
+                notes: isset($validated['notes']) ? (string) $validated['notes'] : null
+            );
+        } catch (MeetingSlotUnavailableException) {
+            return back()
+                ->withInput()
+                ->withErrors(['time' => 'That time is no longer available. Please choose another slot.']);
+        }
+
+        $when = $scheduledAt->format('l, F j \a\t g:i A');
 
         return redirect()
             ->route('focal.meetings.show', ['slug' => $slug])
-            ->with('status', "Meeting booked for {$scheduledAt->format('l, F j \a\t g:i A')}! An invitation has been dispatched.");
+            ->with('status', "Meeting booked for {$when} ({$timezone}). A confirmation with a calendar invite is on its way to {$result['booking']->invitee_email}.");
     }
 }

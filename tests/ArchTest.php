@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
 
 // Dependency rules scan source text; see sourceFilesMatching() in tests/Pest.php.
 it('sales domain remains strictly headless (no Filament or Livewire)', function (): void {
@@ -22,3 +24,18 @@ arch('all sales domain actions have an execute method')
 arch('all sales enums are string backed for database agnosticism')
     ->expect('Focal\Sales\Enums')
     ->toBeStringBackedEnums();
+
+it('queues every mailable Sales sends', function (): void {
+    $mailables = [];
+
+    foreach (glob(dirname(__DIR__).'/src/Mail/*.php') ?: [] as $file) {
+        $class = 'Focal\\Sales\\Mail\\'.basename($file, '.php');
+
+        if (class_exists($class) && is_subclass_of($class, Mailable::class)) {
+            $mailables[] = $class;
+            expect(is_subclass_of($class, ShouldQueue::class))->toBeTrue("{$class} must implement ShouldQueue");
+        }
+    }
+
+    expect($mailables)->not->toBeEmpty();
+});

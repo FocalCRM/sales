@@ -6,8 +6,10 @@ namespace Focal\Sales\Models;
 
 use Carbon\CarbonInterface;
 use Focal\Core\Support\UserModel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -15,12 +17,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $slug
  * @property string $title
  * @property int $duration_minutes
+ * @property int $buffer_minutes
  * @property string|null $description
- * @property array<string, list<string>>|null $working_hours
+ * @property array<string, list<string>>|null $working_hours Day name => list of "HH:MM-HH:MM" windows.
+ * @property string|null $timezone
  * @property bool $is_active
  * @property CarbonInterface|null $created_at
  * @property CarbonInterface|null $updated_at
  * @property-read Model $user
+ * @property-read Collection<int, SalesMeetingBooking> $bookings
  */
 class SalesMeetingLink extends Model
 {
@@ -34,8 +39,10 @@ class SalesMeetingLink extends Model
         'slug',
         'title',
         'duration_minutes',
+        'buffer_minutes',
         'description',
         'working_hours',
+        'timezone',
         'is_active',
     ];
 
@@ -56,6 +63,7 @@ class SalesMeetingLink extends Model
     {
         return [
             'duration_minutes' => 'integer',
+            'buffer_minutes' => 'integer',
             'working_hours' => 'array',
             'is_active' => 'boolean',
         ];
@@ -71,5 +79,29 @@ class SalesMeetingLink extends Model
         $userModel = UserModel::className();
 
         return $this->belongsTo($userModel, 'user_id');
+    }
+
+    /**
+     * Bookings made through this link.
+     *
+     * @return HasMany<SalesMeetingBooking, $this>
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(SalesMeetingBooking::class, 'meeting_link_id');
+    }
+
+    /**
+     * The timezone working hours are interpreted in: the link's own, or the app's.
+     */
+    public function timezoneName(): string
+    {
+        $timezone = $this->timezone;
+
+        if (is_string($timezone) && $timezone !== '' && in_array($timezone, timezone_identifiers_list(), true)) {
+            return $timezone;
+        }
+
+        return (string) config('app.timezone', 'UTC');
     }
 }

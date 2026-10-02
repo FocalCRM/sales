@@ -37,11 +37,11 @@ The revenue and deal acceleration engine for the Focal RevOps platform. Delivers
 - **Stage Gate Enforcement:** Require specific fields or custom properties before advancing deals (e.g., require `decision_maker_identified` and `budget_confirmed` before moving to Proposal).
 - **Deal Rotting & Health Scoring:** Automatic calculation of deal vitality (0–100) based on stage stall duration, recent rep touchpoints, and upcoming scheduled activities.
 - **CPQ & Product Catalog:** Attach line-item products to deals with volume discounts, margin tracking, and auto-sync deal amounts. Generate web quotes with customer self-service acceptance.
-- **Outbound Cadences (Sequences):** Multi-day cadences that schedule email, call, and LinkedIn steps for reps and log each step to the contact timeline. Email steps are logged as activities; sending them is not automated yet.
+- **Outbound Cadences (Sequences):** Multi-day cadences that schedule email, call, and LinkedIn steps for reps and log each step to the contact timeline. Email steps send the step's rendered template to the contact as a queued email and log it to the timeline.
 - **Stage Automations:** Automatically trigger tasks, send internal alerts, update fields, or dispatch webhooks when deals transition across pipeline stages.
 - **Intelligent Lead & Deal Routing:** Route inbound records to reps using `RoundRobin`, `Weighted`, `Territory`, or `SkillBased` routing rules.
 - **Weighted Revenue Forecasting & Quotas:** Calculate real-time pipeline forecasts ($\sum \text{amount} \times \text{probability}$) and track rep quota attainment over monthly, quarterly, or annual periods.
-- **Sales Playbooks & Meeting Scheduler:** Provide reps with structured qualification scripts while letting prospects book time directly via personalized booking links.
+- **Sales Playbooks & Meeting Scheduler:** Provide reps with structured qualification scripts while letting prospects book open slots (from each link's working hours, minus existing bookings) via personalized booking links, with queued confirmation emails and .ics invites.
 
 ---
 
@@ -125,7 +125,7 @@ app(EnrollContactInSequenceAction::class)->execute(
 );
 
 // Progress pending sequence steps via scheduler
-// Scheduled automatically via: php artisan focal:sales-process-cadences
+// Schedule it yourself: php artisan sales:process-cadences (and run a queue worker for email steps)
 ```
 
 ### 4. Pipeline Forecasting & Quota Attainment
@@ -194,6 +194,7 @@ Each group also accepts `middleware`. To register the routes yourself, set `rout
 | `SalesSequenceEnrollment`| `sales_sequence_enrollments` | Contact state tracking across cadence steps. |
 | `SalesPlaybook` | `sales_playbooks` | Interactive question checklists and qualification objection handlers. |
 | `SalesMeetingLink` | `sales_meeting_links` | Rep calendar booking links and meeting slot configurations. |
+| `SalesMeetingBooking` | `sales_meeting_bookings` | Booked slots; active bookings block the rep's availability. |
 | `LeadRoutingRule` | `lead_routing_rules` | Assignment rules mapping inbound criteria to rep pools. |
 | `StageAutomation` | `stage_automations` | Actions triggered upon entering or exiting pipeline stages. |
 

@@ -34,6 +34,7 @@ use Focal\Sales\Models\SalesPlaybook;
 use Focal\Sales\Models\SalesQuota;
 use Focal\Sales\Models\SalesSequence;
 use Focal\Sales\Models\StageAutomation;
+use Focal\Sales\Services\MeetingAvailability;
 use Focal\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -186,6 +187,8 @@ class SalesHardeningTest extends TestCase
             'slug' => 'alex-demo',
             'title' => 'Product Demo 30m',
             'duration_minutes' => 30,
+            // Open every day so "tomorrow" is bookable whatever weekday the suite runs on.
+            'working_hours' => array_fill_keys(MeetingAvailability::DAYS, ['09:00-17:00']),
             'user_id' => $user->id,
             'is_active' => true,
         ]);

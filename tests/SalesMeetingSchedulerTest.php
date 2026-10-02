@@ -7,6 +7,7 @@ namespace Focal\Sales\Tests;
 use Focal\Core\Enums\ActivityType;
 use Focal\Core\Models\Contact;
 use Focal\Sales\Models\SalesMeetingLink;
+use Focal\Sales\Services\MeetingAvailability;
 use Focal\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -41,6 +42,8 @@ class SalesMeetingSchedulerTest extends TestCase
             'slug' => 'beth-caldwell-demo',
             'title' => 'Product Demo Call',
             'duration_minutes' => 45,
+            // Open every day so "tomorrow" is bookable whatever weekday the suite runs on.
+            'working_hours' => array_fill_keys(MeetingAvailability::DAYS, ['09:00-17:00']),
             'is_active' => true,
         ]);
 
@@ -49,7 +52,7 @@ class SalesMeetingSchedulerTest extends TestCase
             'email' => 'clark@dailyplanet.com',
             'phone' => '+1 (555) 123-4567',
             'date' => now()->addDay()->toDateString(),
-            'time' => '14:00',
+            'time' => '09:00', // 45-minute slots start at 09:00, 09:45, ... (14:00 is not on the grid)
             'notes' => 'Looking to migrate our entire newsroom workflow.',
         ]);
 

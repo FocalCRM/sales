@@ -8,19 +8,33 @@ use Focal\Core\Enums\ActivityStatus;
 use Focal\Core\Enums\ActivityType;
 use Focal\Core\Enums\LeadStatus;
 use Focal\Core\Models\Activity;
+use Focal\Core\Support\UserModel;
+use Focal\Sales\Mail\SalesMail;
+use Focal\Sales\Mail\SequenceStepMail;
 use Focal\Sales\Models\SalesEmailTemplate;
 use Focal\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ProcessCadencesAction
 {
+    /**
+     * Why an email step was not sent, keyed by the skip_reason stored in the activity metadata.
+     */
+    public const SKIP_REASONS = [
+        'missing_email' => 'Not sent: the contact has no email address.',
+        'invalid_email' => 'Not sent: the contact\'s email address is not valid.',
+        'missing_template' => 'Not sent: the step has no email template, or its template was deleted.',
+    ];
+
     /**
      * Process due steps across all active sales sequence enrollments.
      *
      * @return array{
      *     processed: int,
      *     emails_sent: int,
+     *     emails_skipped: int,
      *     tasks_created: int,
      *     unenrolled: int,
      *     completed: int
@@ -33,6 +47,7 @@ class ProcessCadencesAction
         $stats = [
             'processed' => 0,
             'emails_sent' => 0,
+            'emails_skipped' => 0,
             'tasks_created' => 0,
             'unenrolled' => 0,
             'completed' => 0,
@@ -45,7 +60,7 @@ class ProcessCadencesAction
                 $q->whereNull('next_step_due_at')
                     ->orWhereDate('next_step_due_at', '<=', $todayStr);
             })
-            ->with(['contact.companies', 'sequence'])
+            ->with(['contact.companies', 'sequence.user', 'enrolledBy'])
             ->get();
 
         foreach ($dueEnrollments as $enrollment) {
@@ -87,37 +102,13 @@ class ProcessCadencesAction
             $stepTitle = $stepDef['title'];
 
             if ($stepType === 'email') {
-                $templateId = $stepDef['template_id'] ?? null;
+                $result = $this->runEmailStep($enrollment, $stepDef);
 
-                $subject = "Outbound: {$stepTitle}";
-                $body = "Automated email sent via cadence [{$sequence->name}].";
-
-                if ($templateId !== null) {
-                    /** @var SalesEmailTemplate|null $template */
-                    $template = SalesEmailTemplate::find($templateId);
-                    if ($template !== null) {
-                        $rendered = $template->renderWithContext($contact);
-                        $subject = $rendered['subject'];
-                        $body = $rendered['body_html'];
-                    }
+                if ($result === 'sent') {
+                    $stats['emails_sent']++;
+                } elseif ($result === 'skipped') {
+                    $stats['emails_skipped']++;
                 }
-
-                $contact->logActivity(
-                    type: ActivityType::Email,
-                    title: $subject,
-                    body: $body,
-                    status: ActivityStatus::Completed,
-                    creatorId: $enrollment->enrolled_by_id
-                );
-
-                $contact->markContacted();
-
-                if ($contact->lead_status === LeadStatus::New) {
-                    $contact->updateQuietly(['lead_status' => LeadStatus::InProgress]);
-                }
-
-                $enrollment->advanceStep();
-                $stats['emails_sent']++;
             } else {
                 // Manual action: Call, LinkedIn, or Task
                 $actType = match ($stepType) {
@@ -143,8 +134,9 @@ class ProcessCadencesAction
                 if ($existingActivity !== null) {
                     if ($existingActivity->status === ActivityStatus::Completed) {
                         // Rep finished manual step - advance sequence to next step
-                        $contact->markContacted();
-                        $enrollment->advanceStep();
+                        if ($enrollment->claimStep($enrollment->current_step)) {
+                            $contact->markContacted();
+                        }
                     }
                     // If still pending, wait for rep completion
                 } else {
@@ -166,5 +158,118 @@ class ProcessCadencesAction
         }
 
         return $stats;
+    }
+
+    /**
+     * Send (queue) one email step, or skip it when it can't be sent. Either way the enrollment moves on.
+     *
+     * Advancing the enrollment is the claim: it only succeeds if the enrollment is still on this step,
+     * so a step is never sent twice even if two runs overlap. The mail is queued after the
+     * transaction commits.
+     *
+     * @param  array{step: int, type: string, delay_days: int, title: string, template_id?: int|null}  $stepDef
+     * @return 'sent'|'skipped'|null Null when another run already handled the step.
+     */
+    protected function runEmailStep(SalesSequenceEnrollment $enrollment, array $stepDef): ?string
+    {
+        $contact = $enrollment->contact;
+        $sequence = $enrollment->sequence;
+        $step = $enrollment->current_step;
+        $owner = $enrollment->enrolledBy ?? $sequence->user;
+
+        $email = trim((string) $contact->email);
+        $templateId = $stepDef['template_id'] ?? null;
+        /** @var SalesEmailTemplate|null $template */
+        $template = $templateId !== null ? SalesEmailTemplate::query()->find($templateId) : null;
+
+        $skipReason = match (true) {
+            $email === '' => 'missing_email',
+            filter_var($email, FILTER_VALIDATE_EMAIL) === false => 'invalid_email',
+            $template === null => 'missing_template',
+            default => null,
+        };
+
+        $metadata = [
+            'sequence_id' => $sequence->id,
+            'sequence_enrollment_id' => $enrollment->id,
+            'step' => $step,
+            'template_id' => $templateId,
+        ];
+
+        return DB::transaction(
+            fn (): ?string => $this->claimAndRunEmailStep($enrollment, $stepDef, $email, $template, $skipReason, $metadata)
+        );
+    }
+
+    /**
+     * Runs inside the step transaction: claim the step, then either log the skip or log and queue the email.
+     *
+     * @param  array{step: int, type: string, delay_days: int, title: string, template_id?: int|null}  $stepDef
+     * @param  array<string, mixed>  $metadata
+     * @return 'sent'|'skipped'|null Null when another run already handled the step.
+     */
+    protected function claimAndRunEmailStep(
+        SalesSequenceEnrollment $enrollment,
+        array $stepDef,
+        string $email,
+        ?SalesEmailTemplate $template,
+        ?string $skipReason,
+        array $metadata
+    ): ?string {
+        $contact = $enrollment->contact;
+        $sequence = $enrollment->sequence;
+        $step = $enrollment->current_step;
+        $owner = $enrollment->enrolledBy ?? $sequence->user;
+
+        if (! $enrollment->claimStep($step)) {
+            return null;
+        }
+
+        if ($skipReason !== null || $template === null) {
+            $contact->logActivity(
+                type: ActivityType::Email,
+                title: "Not sent: {$stepDef['title']}",
+                body: self::SKIP_REASONS[$skipReason ?? 'missing_template']." (Cadence [{$sequence->name}] Step {$step})",
+                metadata: $metadata + ['skipped' => true, 'skip_reason' => $skipReason ?? 'missing_template'],
+                status: ActivityStatus::Cancelled,
+                creatorId: $enrollment->enrolled_by_id
+            );
+
+            return 'skipped';
+        }
+
+        $rendered = $template->renderWithContext($contact, null, $owner);
+
+        $contact->logActivity(
+            type: ActivityType::Email,
+            title: $rendered['subject'],
+            body: $rendered['body_html'],
+            metadata: $metadata + ['to' => $email],
+            status: ActivityStatus::Completed,
+            creatorId: $enrollment->enrolled_by_id
+        );
+
+        $contact->markContacted();
+
+        if ($contact->lead_status === LeadStatus::New) {
+            $contact->updateQuietly(['lead_status' => LeadStatus::InProgress]);
+        }
+
+        $ownerEmail = $owner?->getAttribute('email');
+        $ownerEmail = is_string($ownerEmail) && $ownerEmail !== '' ? $ownerEmail : null;
+        $ownerName = $owner !== null ? UserModel::displayName($owner, '') : '';
+        $ownerName = $ownerName !== '' ? $ownerName : null;
+        $sendAsOwner = (bool) config('focal-sales.mail.sequences.send_as_owner', false) && $ownerEmail !== null;
+
+        SalesMail::to($email, $contact->full_name)->queue(new SequenceStepMail(
+            subjectLine: $rendered['subject'],
+            htmlBody: $rendered['body_html'],
+            fromAddress: $sendAsOwner ? $ownerEmail : null,
+            fromName: $sendAsOwner ? $ownerName : null,
+            replyToAddress: $ownerEmail,
+            replyToName: $ownerName,
+        ));
+
+        return 'sent';
     }
 }

@@ -21,7 +21,7 @@ class ProcessCadencesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Process due outbound sales sequences, dispatch automated emails, and queue rep cockpit tasks';
+    protected $description = 'Process due outbound sales sequences: queue email steps for delivery and create rep tasks for manual steps';
 
     /**
      * Execute the console command.
@@ -36,7 +36,8 @@ class ProcessCadencesCommand extends Command
             ['Metric', 'Count'],
             [
                 ['Enrollments Evaluated', $stats['processed']],
-                ['Automated Emails Dispatched', $stats['emails_sent']],
+                ['Emails Queued for Delivery', $stats['emails_sent']],
+                ['Emails Skipped (no address or template)', $stats['emails_skipped']],
                 ['Cockpit Tasks / Calls Queued', $stats['tasks_created']],
                 ['Auto-Unenrolled Contacts', $stats['unenrolled']],
                 ['Cadences Completed', $stats['completed']],
