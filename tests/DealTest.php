@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Models\Company;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Events\DealLost;
-use Focal\Sales\Events\DealMovedStage;
-use Focal\Sales\Events\DealWon;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
+use Odden\Core\Models\Company;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Events\DealLost;
+use Odden\Sales\Events\DealMovedStage;
+use Odden\Sales\Events\DealWon;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
@@ -36,7 +36,7 @@ class DealTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('focal_deals', [
+        $this->assertDatabaseHas('odden_deals', [
             'id' => $deal->id,
             'name' => 'Acme Cloud Migration',
             'amount' => 45000.00,
@@ -160,7 +160,7 @@ class DealTest extends TestCase
             'amount' => 25000.00,
         ]);
 
-        $this->assertDatabaseHas('focal_property_history', [
+        $this->assertDatabaseHas('odden_property_history', [
             'auditable_type' => $deal->getMorphClass(),
             'auditable_id' => $deal->id,
             'property_name' => 'amount',

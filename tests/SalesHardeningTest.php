@@ -2,40 +2,40 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
 use Carbon\Carbon;
-use Focal\Core\Enums\ActivityStatus;
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Models\Activity;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Actions\AcceptQuoteAction;
-use Focal\Sales\Actions\BookMeetingAction;
-use Focal\Sales\Actions\ChangeDealStageAction;
-use Focal\Sales\Actions\EnrollContactInSequenceAction;
-use Focal\Sales\Actions\ExecuteSalesPlaybookAction;
-use Focal\Sales\Actions\GenerateQuoteFromDealAction;
-use Focal\Sales\Actions\ProcessCadencesAction;
-use Focal\Sales\Actions\RouteLeadAction;
-use Focal\Sales\Actions\SyncDealAmountAction;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Enums\LeadRoutingStrategy;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Enums\StageAutomationActionType;
-use Focal\Sales\Exceptions\StageRequirementException;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealProduct;
-use Focal\Sales\Models\LeadRoutingRule;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\PipelineStage;
-use Focal\Sales\Models\Quote;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Models\SalesPlaybook;
-use Focal\Sales\Models\SalesQuota;
-use Focal\Sales\Models\SalesSequence;
-use Focal\Sales\Models\StageAutomation;
-use Focal\Sales\Services\MeetingAvailability;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Enums\ActivityStatus;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Models\Activity;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Actions\AcceptQuoteAction;
+use Odden\Sales\Actions\BookMeetingAction;
+use Odden\Sales\Actions\ChangeDealStageAction;
+use Odden\Sales\Actions\EnrollContactInSequenceAction;
+use Odden\Sales\Actions\ExecuteSalesPlaybookAction;
+use Odden\Sales\Actions\GenerateQuoteFromDealAction;
+use Odden\Sales\Actions\ProcessCadencesAction;
+use Odden\Sales\Actions\RouteLeadAction;
+use Odden\Sales\Actions\SyncDealAmountAction;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Enums\LeadRoutingStrategy;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Enums\StageAutomationActionType;
+use Odden\Sales\Exceptions\StageRequirementException;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealProduct;
+use Odden\Sales\Models\LeadRoutingRule;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\PipelineStage;
+use Odden\Sales\Models\Quote;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Models\SalesPlaybook;
+use Odden\Sales\Models\SalesQuota;
+use Odden\Sales\Models\SalesSequence;
+use Odden\Sales\Models\StageAutomation;
+use Odden\Sales\Services\MeetingAvailability;
+use Odden\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesHardeningTest extends TestCase
@@ -445,7 +445,7 @@ class SalesHardeningTest extends TestCase
 
         $this->assertSame(QuoteStatus::Draft, $quote->status);
 
-        $response = $this->get(route('focal.quotes.show', ['token' => $quote->public_token]));
+        $response = $this->get(route('odden.quotes.show', ['token' => $quote->public_token]));
         $response->assertOk();
 
         $this->assertSame(QuoteStatus::Sent, $quote->fresh()->status);

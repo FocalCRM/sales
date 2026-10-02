@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 return [
     'tables' => [
-        'pipelines' => 'focal_pipelines',
-        'stages' => 'focal_pipeline_stages',
-        'deals' => 'focal_deals',
-        'stage_history' => 'focal_deal_stage_history',
-        'products' => 'focal_deal_products',
-        'quotes' => 'focal_quotes',
-        'quote_items' => 'focal_quote_items',
-        'automations' => 'focal_stage_automations',
-        'quotas' => 'focal_sales_quotas',
-        'email_templates' => 'focal_sales_email_templates',
-        'sequences' => 'focal_sales_sequences',
-        'sequence_enrollments' => 'focal_sales_sequence_enrollments',
-        'playbooks' => 'focal_sales_playbooks',
-        'meeting_links' => 'focal_sales_meeting_links',
-        'meeting_bookings' => 'focal_sales_meeting_bookings',
-        'lead_routing_rules' => 'focal_sales_lead_routing_rules',
+        'pipelines' => 'odden_pipelines',
+        'stages' => 'odden_pipeline_stages',
+        'deals' => 'odden_deals',
+        'stage_history' => 'odden_deal_stage_history',
+        'products' => 'odden_deal_products',
+        'quotes' => 'odden_quotes',
+        'quote_items' => 'odden_quote_items',
+        'automations' => 'odden_stage_automations',
+        'quotas' => 'odden_sales_quotas',
+        'email_templates' => 'odden_sales_email_templates',
+        'sequences' => 'odden_sales_sequences',
+        'sequence_enrollments' => 'odden_sales_sequence_enrollments',
+        'playbooks' => 'odden_sales_playbooks',
+        'meeting_links' => 'odden_sales_meeting_links',
+        'meeting_bookings' => 'odden_sales_meeting_bookings',
+        'lead_routing_rules' => 'odden_sales_lead_routing_rules',
     ],
 
-    'default_currency' => env('FOCAL_DEFAULT_CURRENCY', 'USD'),
+    'default_currency' => env('ODDEN_DEFAULT_CURRENCY', 'USD'),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,17 +38,17 @@ return [
     |
     */
     'mail' => [
-        'mailer' => env('FOCAL_SALES_MAILER'),
-        'connection' => env('FOCAL_SALES_QUEUE_CONNECTION'),
-        'queue' => env('FOCAL_SALES_MAIL_QUEUE'),
+        'mailer' => env('ODDEN_SALES_MAILER'),
+        'connection' => env('ODDEN_SALES_QUEUE_CONNECTION'),
+        'queue' => env('ODDEN_SALES_MAIL_QUEUE'),
 
         'from' => [
-            'address' => env('FOCAL_SALES_FROM_ADDRESS'),
-            'name' => env('FOCAL_SALES_FROM_NAME'),
+            'address' => env('ODDEN_SALES_FROM_ADDRESS'),
+            'name' => env('ODDEN_SALES_FROM_NAME'),
         ],
 
         'sequences' => [
-            'send_as_owner' => (bool) env('FOCAL_SALES_SEND_AS_OWNER', false),
+            'send_as_owner' => (bool) env('ODDEN_SALES_SEND_AS_OWNER', false),
         ],
     ],
 
@@ -72,7 +72,7 @@ return [
             'friday' => ['09:00-17:00'],
         ],
 
-        'booking_window_days' => (int) env('FOCAL_SALES_BOOKING_WINDOW_DAYS', 60),
+        'booking_window_days' => (int) env('ODDEN_SALES_BOOKING_WINDOW_DAYS', 60),
     ],
 
     /*
@@ -82,16 +82,16 @@ return [
     |
     | The public quote e-sign portal and meeting scheduler. The group accepts
     | a domain, prefix and middleware. Set "enabled" to false to register your
-    | own routes instead; keep the focal.quotes.* and focal.meetings.* route
+    | own routes instead; keep the odden.quotes.* and odden.meetings.* route
     | names, since quotes and meeting links are generated from them.
     |
     */
     'routes' => [
-        'enabled' => (bool) env('FOCAL_SALES_ROUTES_ENABLED', true),
+        'enabled' => (bool) env('ODDEN_SALES_ROUTES_ENABLED', true),
 
         'web' => [
-            'domain' => env('FOCAL_SALES_DOMAIN'),
-            'prefix' => env('FOCAL_SALES_PREFIX', ''),
+            'domain' => env('ODDEN_SALES_DOMAIN'),
+            'prefix' => env('ODDEN_SALES_PREFIX', ''),
             'middleware' => ['web'],
         ],
     ],

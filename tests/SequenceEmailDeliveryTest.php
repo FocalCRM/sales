@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Enums\ActivityStatus;
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Models\Activity;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Actions\EnrollContactInSequenceAction;
-use Focal\Sales\Actions\ProcessCadencesAction;
-use Focal\Sales\Mail\SequenceStepMail;
-use Focal\Sales\Models\SalesEmailTemplate;
-use Focal\Sales\Models\SalesSequence;
-use Focal\Sales\Models\SalesSequenceEnrollment;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Enums\ActivityStatus;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Models\Activity;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Actions\EnrollContactInSequenceAction;
+use Odden\Sales\Actions\ProcessCadencesAction;
+use Odden\Sales\Mail\SequenceStepMail;
+use Odden\Sales\Models\SalesEmailTemplate;
+use Odden\Sales\Models\SalesSequence;
+use Odden\Sales\Models\SalesSequenceEnrollment;
+use Odden\Sales\Tests\Fixtures\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\MailManager;
 use Illuminate\Support\Facades\Mail;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Mail;
 beforeEach(function (): void {
     Mail::fake();
 
-    $this->rep = User::factory()->create(['name' => 'Beth Caldwell', 'email' => 'beth@focal.test']);
+    $this->rep = User::factory()->create(['name' => 'Beth Caldwell', 'email' => 'beth@odden.test']);
 
     $this->template = SalesEmailTemplate::query()->create([
         'name' => 'Cold Intro',
@@ -158,11 +158,11 @@ it('does not resend a step another run already claimed', function (): void {
 
 it('uses the configured queue, mailer and from address', function (): void {
     config([
-        'focal-sales.mail.queue' => 'sales-mail',
-        'focal-sales.mail.connection' => 'redis',
-        'focal-sales.mail.mailer' => 'postmark',
-        'focal-sales.mail.from.address' => 'sales@acme.test',
-        'focal-sales.mail.from.name' => 'Acme Sales',
+        'odden-sales.mail.queue' => 'sales-mail',
+        'odden-sales.mail.connection' => 'redis',
+        'odden-sales.mail.mailer' => 'postmark',
+        'odden-sales.mail.from.address' => 'sales@acme.test',
+        'odden-sales.mail.from.name' => 'Acme Sales',
     ]);
 
     $contact = Contact::factory()->create(['email' => 'dana@example.com']);
@@ -176,29 +176,29 @@ it('uses the configured queue, mailer and from address', function (): void {
             && $mail->connection === 'redis'
             && $mail->mailer === 'postmark'
             && $mail->hasFrom('sales@acme.test', 'Acme Sales')
-            && $mail->hasReplyTo('beth@focal.test');
+            && $mail->hasReplyTo('beth@odden.test');
     });
 });
 
 it('falls back to the app default from address and can send as the enrollment owner', function (): void {
     $contact = Contact::factory()->create(['email' => 'dana@example.com']);
     $sequence = ($this->makeSequence)([($this->emailStep)($this->template->id)]);
-    $other = User::factory()->create(['name' => 'Mark Hunter', 'email' => 'mark@focal.test']);
+    $other = User::factory()->create(['name' => 'Mark Hunter', 'email' => 'mark@odden.test']);
     app(EnrollContactInSequenceAction::class)->execute($contact, $sequence, $other->id);
 
     app(ProcessCadencesAction::class)->execute();
 
     Mail::assertQueued(SequenceStepMail::class, fn (SequenceStepMail $mail): bool => $mail->fromAddress === null
-        && $mail->replyToAddress === 'mark@focal.test');
+        && $mail->replyToAddress === 'mark@odden.test');
 
-    config(['focal-sales.mail.sequences.send_as_owner' => true]);
+    config(['odden-sales.mail.sequences.send_as_owner' => true]);
     $second = Contact::factory()->create(['email' => 'fox@example.com']);
     app(EnrollContactInSequenceAction::class)->execute($second, $sequence, $other->id);
 
     app(ProcessCadencesAction::class)->execute();
 
     Mail::assertQueued(SequenceStepMail::class, fn (SequenceStepMail $mail): bool => $mail->hasTo('fox@example.com')
-        && $mail->hasFrom('mark@focal.test', 'Mark Hunter'));
+        && $mail->hasFrom('mark@odden.test', 'Mark Hunter'));
 });
 
 it('reports real sends in the command output', function (): void {

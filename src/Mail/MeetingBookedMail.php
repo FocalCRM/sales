@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Mail;
+namespace Odden\Sales\Mail;
 
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Models\SalesMeetingBooking;
-use Focal\Sales\Services\MeetingInvite;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Models\SalesMeetingBooking;
+use Odden\Sales\Services\MeetingInvite;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -61,7 +61,7 @@ class MeetingBookedMail extends Mailable implements ShouldQueue
         $booking = $this->booking;
 
         return new Content(
-            view: 'focal-sales::mail.meeting-booked',
+            view: 'odden-sales::mail.meeting-booked',
             with: [
                 'booking' => $booking,
                 'link' => $booking->meetingLink,

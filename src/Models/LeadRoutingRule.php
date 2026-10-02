@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Sales\Enums\LeadRoutingStrategy;
+use Odden\Sales\Enums\LeadRoutingStrategy;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -42,7 +42,7 @@ class LeadRoutingRule extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.lead_routing_rules', 'focal_sales_lead_routing_rules');
+        return config('odden-sales.tables.lead_routing_rules', 'odden_sales_lead_routing_rules');
     }
 
     /**

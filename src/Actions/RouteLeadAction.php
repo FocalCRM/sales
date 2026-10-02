@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Enums\LeadRoutingStrategy;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\LeadRoutingRule;
-use Focal\Sales\Models\SalesQuota;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Enums\LeadRoutingStrategy;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\LeadRoutingRule;
+use Odden\Sales\Models\SalesQuota;
 use Illuminate\Database\Eloquent\Collection;
 
 class RouteLeadAction

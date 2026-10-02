@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Mail;
+namespace Odden\Sales\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +20,7 @@ class SequenceStepMail extends Mailable implements ShouldQueue
     use ConfiguresSalesMail, Queueable, SerializesModels;
 
     /**
-     * @param  string|null  $fromAddress  Null uses focal-sales.mail.from, then the app's mail.from.
+     * @param  string|null  $fromAddress  Null uses odden-sales.mail.from, then the app's mail.from.
      */
     public function __construct(
         public string $subjectLine,

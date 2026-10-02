@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Sales\Database\Factories\DealProductFactory;
+use Odden\Sales\Database\Factories\DealProductFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,7 +56,7 @@ class DealProduct extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.products', 'focal_deal_products');
+        return config('odden-sales.tables.products', 'odden_deal_products');
     }
 
     /**

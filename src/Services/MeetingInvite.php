@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Services;
+namespace Odden\Sales\Services;
 
 use Carbon\CarbonImmutable;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Models\SalesMeetingBooking;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Models\SalesMeetingBooking;
 
 /**
  * Builds the iCalendar (.ics, RFC 5545) invite attached to meeting confirmations.
@@ -27,11 +27,11 @@ class MeetingInvite
         $lines = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
-            'PRODID:-//Focal CRM//Sales Meetings//EN',
+            'PRODID:-//Odden CRM//Sales Meetings//EN',
             'CALSCALE:GREGORIAN',
             'METHOD:'.$this->method($booking),
             'BEGIN:VEVENT',
-            "UID:{$booking->uid}@focalcrm",
+            "UID:{$booking->uid}@getodden",
             'DTSTAMP:'.self::utc(CarbonImmutable::now()),
             'DTSTART:'.self::utc(CarbonImmutable::instance($booking->starts_at)),
             'DTEND:'.self::utc(CarbonImmutable::instance($booking->ends_at)),

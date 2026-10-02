@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Listeners;
+namespace Odden\Sales\Listeners;
 
-use Focal\Core\Events\ContactsMerged;
+use Odden\Core\Events\ContactsMerged;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,7 +23,7 @@ class MoveMergedRecords
         $this->resolveEnrollmentConflicts($from, $to);
 
         foreach (['sequence_enrollments', 'meeting_bookings'] as $key) {
-            DB::table((string) config("focal-sales.tables.{$key}", "focal_sales_{$key}"))
+            DB::table((string) config("odden-sales.tables.{$key}", "odden_sales_{$key}"))
                 ->where('contact_id', $from)
                 ->update(['contact_id' => $to]);
         }
@@ -37,7 +37,7 @@ class MoveMergedRecords
      */
     private function resolveEnrollmentConflicts(mixed $from, mixed $to): void
     {
-        $table = (string) config('focal-sales.tables.sequence_enrollments', 'focal_sales_sequence_enrollments');
+        $table = (string) config('odden-sales.tables.sequence_enrollments', 'odden_sales_sequence_enrollments');
 
         $sequenceIds = DB::table($table)
             ->where('contact_id', $from)

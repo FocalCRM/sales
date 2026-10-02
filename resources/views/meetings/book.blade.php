@@ -274,7 +274,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('focal.meetings.show', ['slug' => $link->slug]) }}" method="GET" class="form-group">
+            <form action="{{ route('odden.meetings.show', ['slug' => $link->slug]) }}" method="GET" class="form-group">
                 <label for="date">Select Date</label>
                 <div class="date-row">
                     <input
@@ -292,7 +292,7 @@
                 </div>
             </form>
 
-            <form action="{{ route('focal.meetings.book', ['slug' => $link->slug]) }}" method="POST">
+            <form action="{{ route('odden.meetings.book', ['slug' => $link->slug]) }}" method="POST">
                 @csrf
                 <input type="hidden" name="date" value="{{ $date }}">
                 <div style="display: flex; flex-direction: column; gap: 1rem;">

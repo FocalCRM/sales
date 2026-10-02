@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Support\UserModel;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $sequencesTable = config('focal-sales.tables.sequences', 'focal_sales_sequences');
-        $enrollmentsTable = config('focal-sales.tables.sequence_enrollments', 'focal_sales_sequence_enrollments');
-        $contactsTable = config('focal-core.tables.contacts', 'focal_contacts');
+        $sequencesTable = config('odden-sales.tables.sequences', 'odden_sales_sequences');
+        $enrollmentsTable = config('odden-sales.tables.sequence_enrollments', 'odden_sales_sequence_enrollments');
+        $contactsTable = config('odden-core.tables.contacts', 'odden_contacts');
 
         Schema::create($sequencesTable, function (Blueprint $table): void {
             $table->id();
@@ -48,7 +48,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('focal-sales.tables.sequence_enrollments', 'focal_sales_sequence_enrollments'));
-        Schema::dropIfExists(config('focal-sales.tables.sequences', 'focal_sales_sequences'));
+        Schema::dropIfExists(config('odden-sales.tables.sequence_enrollments', 'odden_sales_sequence_enrollments'));
+        Schema::dropIfExists(config('odden-sales.tables.sequences', 'odden_sales_sequences'));
     }
 };

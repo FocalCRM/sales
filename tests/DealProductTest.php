@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealProduct;
-use Focal\Sales\Models\Pipeline;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealProduct;
+use Odden\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DealProductTest extends TestCase

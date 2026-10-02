@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Models\Deal;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Models\Deal;
 use Illuminate\Database\Eloquent\Collection;
 
 class CalculatePipelineForecastAction
@@ -28,8 +28,8 @@ class CalculatePipelineForecastAction
      */
     public function execute(?int $pipelineId = null): array
     {
-        $dealsTable = config('focal-sales.tables.deals', 'focal_deals');
-        $stagesTable = config('focal-sales.tables.stages', 'focal_pipeline_stages');
+        $dealsTable = config('odden-sales.tables.deals', 'odden_deals');
+        $stagesTable = config('odden-sales.tables.stages', 'odden_pipeline_stages');
 
         $baseQuery = Deal::query();
         if ($pipelineId !== null) {

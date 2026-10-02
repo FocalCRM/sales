@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Core\Models\Activity;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Quote;
+use Odden\Core\Models\Activity;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Quote;
 
 class CalculateDealHealthScoreAction
 {

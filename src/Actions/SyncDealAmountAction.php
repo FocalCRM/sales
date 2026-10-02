@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Sales\Models\Deal;
+use Odden\Sales\Models\Deal;
 
 class SyncDealAmountAction
 {

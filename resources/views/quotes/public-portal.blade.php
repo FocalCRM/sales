@@ -363,9 +363,9 @@
                 <p>Proposal #{{ $quote->quote_number }} &bull; Deal: {{ $quote->deal?->name ?? 'Sales Contract' }}</p>
             </div>
             <div>
-                @if ($quote->status === \Focal\Sales\Enums\QuoteStatus::Accepted)
+                @if ($quote->status === \Odden\Sales\Enums\QuoteStatus::Accepted)
                     <span class="status-badge accepted">&#10003; Accepted & Signed</span>
-                @elseif ($quote->status === \Focal\Sales\Enums\QuoteStatus::Declined)
+                @elseif ($quote->status === \Odden\Sales\Enums\QuoteStatus::Declined)
                     <span class="status-badge expired">Declined</span>
                 @elseif (! $quote->isAcceptable())
                     <span class="status-badge expired">Expired</span>
@@ -494,7 +494,7 @@
             @endif
 
             {{-- Signature Acceptance Block --}}
-            @if ($quote->status === \Focal\Sales\Enums\QuoteStatus::Accepted)
+            @if ($quote->status === \Odden\Sales\Enums\QuoteStatus::Accepted)
                 <div class="signature-section signed">
                     <div class="sig-title" style="color: #15803d;">
                         &#10003; Agreement Fully Executed
@@ -509,7 +509,7 @@
                 </div>
             @elseif (! $quote->isAcceptable())
                 <div class="signature-section" style="background: #fef2f2; border-color: #fca5a5;">
-                    @if ($quote->status === \Focal\Sales\Enums\QuoteStatus::Declined)
+                    @if ($quote->status === \Odden\Sales\Enums\QuoteStatus::Declined)
                         <div class="sig-title" style="color: #b91c1c;">Proposal Declined</div>
                         <p class="sig-subtitle" style="color: #991b1b;">
                             This quote was declined and is no longer available for acceptance. Please reach out to your sales representative to request an updated proposal.
@@ -531,7 +531,7 @@
                     <div class="sig-title">Accept & Sign Proposal</div>
                     <p class="sig-subtitle">Please enter your legal name and email to execute this agreement.</p>
 
-                    <form action="{{ route('focal.quotes.accept', ['token' => $quote->public_token]) }}" method="POST">
+                    <form action="{{ route('odden.quotes.accept', ['token' => $quote->public_token]) }}" method="POST">
                         @csrf
                         <div class="sig-form-grid">
                             <div class="sig-input-group">

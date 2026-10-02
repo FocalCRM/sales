@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Models\Pipeline;
+use Odden\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PipelineTest extends TestCase
@@ -19,7 +19,7 @@ class PipelineTest extends TestCase
             'is_default' => true,
         ]);
 
-        $this->assertDatabaseHas('focal_pipelines', [
+        $this->assertDatabaseHas('odden_pipelines', [
             'id' => $pipeline->id,
             'code' => 'enterprise_sales',
             'is_default' => 1,

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\SalesQuota;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\SalesQuota;
 
 class CalculateQuotaAttainmentAction
 {
@@ -23,7 +23,7 @@ class CalculateQuotaAttainmentAction
      */
     public function execute(SalesQuota $quota): array
     {
-        $dealsTable = config('focal-sales.tables.deals', 'focal_deals');
+        $dealsTable = config('odden-sales.tables.deals', 'odden_deals');
 
         $dealsQuery = Deal::query()
             ->where("{$dealsTable}.owner_id", $quota->user_id);

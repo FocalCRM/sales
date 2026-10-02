@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Database\Factories;
+namespace Odden\Sales\Database\Factories;
 
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealProduct;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealProduct;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

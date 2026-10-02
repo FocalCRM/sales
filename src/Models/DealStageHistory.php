@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Database\Factories\DealStageHistoryFactory;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Database\Factories\DealStageHistoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,7 +48,7 @@ class DealStageHistory extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.stage_history', 'focal_deal_stage_history');
+        return config('odden-sales.tables.stage_history', 'odden_deal_stage_history');
     }
 
     /**

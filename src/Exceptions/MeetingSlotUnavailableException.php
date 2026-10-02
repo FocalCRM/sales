@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Exceptions;
+namespace Odden\Sales\Exceptions;
 
 use Carbon\CarbonInterface;
 use RuntimeException;

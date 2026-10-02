@@ -1,8 +1,8 @@
-# Focal Sales (`focalcrm/sales`)
+# Odden Sales (`getodden/crm-sales`)
 
-> This is a read-only split of the [focalcrm/focal](https://github.com/focalcrm/focal) monorepo. Please open issues and pull requests there.
+> This is a read-only split of the [getodden/crm](https://github.com/getodden/crm) monorepo. Please open issues and pull requests there.
 
-The revenue and deal acceleration engine for the Focal RevOps platform. Delivers multi-pipeline Kanban tracking, CPQ quoting, automated outbound cadences, stage gate enforcement, weighted revenue forecasting, quota attainment, and intelligent lead routing.
+The revenue and deal acceleration engine for the Odden RevOps platform. Delivers multi-pipeline Kanban tracking, CPQ quoting, automated outbound cadences, stage gate enforcement, weighted revenue forecasting, quota attainment, and intelligent lead routing.
 
 ---
 
@@ -10,7 +10,7 @@ The revenue and deal acceleration engine for the Focal RevOps platform. Delivers
 
 ```
 +-------------------------------------------------------------------------+
-|                               FOCAL SALES                               |
+|                               ODDEN SALES                               |
 |                                                                         |
 |  +--------------------+   +--------------------+   +-----------------+  |
 |  | Multi-Pipelines &  |   |  Stage Gates &     |   | CPQ Quoting &   |  |
@@ -48,14 +48,14 @@ The revenue and deal acceleration engine for the Focal RevOps platform. Delivers
 ## Installation
 
 ```bash
-composer require focalcrm/sales
+composer require getodden/crm-sales
 ```
 
 Publish configuration and migrations:
 
 ```bash
-php artisan vendor:publish --tag=focal-sales-migrations
-php artisan vendor:publish --tag=focal-sales-config
+php artisan vendor:publish --tag=odden-sales-migrations
+php artisan vendor:publish --tag=odden-sales-config
 ```
 
 Run migrations:
@@ -71,8 +71,8 @@ php artisan migrate
 ### 1. Advancing Deal Stages with Gate Enforcement
 
 ```php
-use Focal\Sales\Actions\ChangeDealStageAction;
-use Focal\Sales\Exceptions\StageRequirementException;
+use Odden\Sales\Actions\ChangeDealStageAction;
+use Odden\Sales\Exceptions\StageRequirementException;
 
 try {
     app(ChangeDealStageAction::class)->execute(
@@ -89,8 +89,8 @@ try {
 ### 2. CPQ: Attaching Products & Generating Quotes
 
 ```php
-use Focal\Sales\Actions\GenerateQuoteFromDealAction;
-use Focal\Sales\Models\DealProduct;
+use Odden\Sales\Actions\GenerateQuoteFromDealAction;
+use Odden\Sales\Models\DealProduct;
 
 // Attach products with discounts
 DealProduct::create([
@@ -113,8 +113,8 @@ echo "Quote URL: " . route('sales.quotes.view', ['token' => $quote->public_token
 ### 3. Outbound Cadences (Sales Sequences)
 
 ```php
-use Focal\Sales\Actions\EnrollContactInSequenceAction;
-use Focal\Sales\Models\SalesSequence;
+use Odden\Sales\Actions\EnrollContactInSequenceAction;
+use Odden\Sales\Models\SalesSequence;
 
 $sequence = SalesSequence::where('name', 'Outbound Enterprise SDR')->first();
 
@@ -131,9 +131,9 @@ app(EnrollContactInSequenceAction::class)->execute(
 ### 4. Pipeline Forecasting & Quota Attainment
 
 ```php
-use Focal\Sales\Actions\CalculatePipelineForecastAction;
-use Focal\Sales\Actions\CalculateQuotaAttainmentAction;
-use Focal\Sales\Enums\QuotaPeriod;
+use Odden\Sales\Actions\CalculatePipelineForecastAction;
+use Odden\Sales\Actions\CalculateQuotaAttainmentAction;
+use Odden\Sales\Enums\QuotaPeriod;
 
 // Weighted and unweighted pipeline forecast
 $forecast = app(CalculatePipelineForecastAction::class)->execute(pipelineId: $pipeline->id);
@@ -151,7 +151,7 @@ $attainment = app(CalculateQuotaAttainmentAction::class)->execute(
 ### 5. Automated Lead Routing
 
 ```php
-use Focal\Sales\Actions\RouteLeadAction;
+use Odden\Sales\Actions\RouteLeadAction;
 
 $assignedRepId = app(RouteLeadAction::class)->execute(
     lead: $inboundContact,
@@ -166,15 +166,15 @@ $assignedRepId = app(RouteLeadAction::class)->execute(
 
 The public quote e-sign portal (`/quotes/{token}`) and meeting scheduler (`/meet/{slug}`) are registered in the `web` group with no prefix by default.
 
-Configure them in `config/focal-sales.php` (publish with `php artisan vendor:publish --tag=focal-sales-config`) or through environment variables:
+Configure them in `config/odden-sales.php` (publish with `php artisan vendor:publish --tag=odden-sales-config`) or through environment variables:
 
 ```env
-FOCAL_SALES_PREFIX=sales                # /quotes/{token} becomes /sales/quotes/{token}
-FOCAL_SALES_DOMAIN=deals.example.com     # optional
-FOCAL_SALES_ROUTES_ENABLED=true
+ODDEN_SALES_PREFIX=sales                # /quotes/{token} becomes /sales/quotes/{token}
+ODDEN_SALES_DOMAIN=deals.example.com     # optional
+ODDEN_SALES_ROUTES_ENABLED=true
 ```
 
-Each group also accepts `middleware`. To register the routes yourself, set `routes.enabled` to `false` and define routes with the same names (`focal.quotes.*`, `focal.meetings.*`), because models, emails and notifications generate links from those names.
+Each group also accepts `middleware`. To register the routes yourself, set `routes.enabled` to `false` and define routes with the same names (`odden.quotes.*`, `odden.meetings.*`), because models, emails and notifications generate links from those names.
 
 ---
 

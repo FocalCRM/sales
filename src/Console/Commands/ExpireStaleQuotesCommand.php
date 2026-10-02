@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Console\Commands;
+namespace Odden\Sales\Console\Commands;
 
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Models\Quote;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Models\Quote;
 use Illuminate\Console\Command;
 
 class ExpireStaleQuotesCommand extends Command

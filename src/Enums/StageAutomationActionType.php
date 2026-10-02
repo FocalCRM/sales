@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Enums;
+namespace Odden\Sales\Enums;
 
 enum StageAutomationActionType: string
 {

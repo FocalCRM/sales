@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $stagesTable = config('focal-sales.tables.stages', 'focal_pipeline_stages');
-        $dealsTable = config('focal-sales.tables.deals', 'focal_deals');
-        $productsTable = config('focal-sales.tables.products', 'focal_deal_products');
+        $stagesTable = config('odden-sales.tables.stages', 'odden_pipeline_stages');
+        $dealsTable = config('odden-sales.tables.deals', 'odden_deals');
+        $productsTable = config('odden-sales.tables.products', 'odden_deal_products');
 
         Schema::table($stagesTable, function (Blueprint $table): void {
             $table->unsignedInteger('rot_after_days')->nullable()->after('is_closed_lost');
@@ -48,9 +48,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $stagesTable = config('focal-sales.tables.stages', 'focal_pipeline_stages');
-        $dealsTable = config('focal-sales.tables.deals', 'focal_deals');
-        $productsTable = config('focal-sales.tables.products', 'focal_deal_products');
+        $stagesTable = config('odden-sales.tables.stages', 'odden_pipeline_stages');
+        $dealsTable = config('odden-sales.tables.deals', 'odden_deals');
+        $productsTable = config('odden-sales.tables.products', 'odden_deal_products');
 
         Schema::dropIfExists($productsTable);
 

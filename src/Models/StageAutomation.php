@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Sales\Enums\StageAutomationActionType;
+use Odden\Sales\Enums\StageAutomationActionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -44,7 +44,7 @@ class StageAutomation extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.automations', 'focal_stage_automations');
+        return config('odden-sales.tables.automations', 'odden_stage_automations');
     }
 
     /**

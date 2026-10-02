@@ -10,7 +10,7 @@ it('sales domain remains strictly headless (no Filament or Livewire)', function 
 });
 
 it('sales does not depend on service, marketing, or the Filament UI', function (): void {
-    expect(sourceFilesMatching('/\bFocal\\\\+(Service|Marketing|Filament)\\\\+/'))->toBeEmpty();
+    expect(sourceFilesMatching('/\bOdden\\\\+(Service|Marketing|Filament)\\\\+/'))->toBeEmpty();
 });
 
 arch('no debug functions are left in the code')
@@ -18,18 +18,18 @@ arch('no debug functions are left in the code')
     ->not->toBeUsed();
 
 arch('all sales domain actions have an execute method')
-    ->expect('Focal\Sales\Actions')
+    ->expect('Odden\Sales\Actions')
     ->toHaveMethod('execute');
 
 arch('all sales enums are string backed for database agnosticism')
-    ->expect('Focal\Sales\Enums')
+    ->expect('Odden\Sales\Enums')
     ->toBeStringBackedEnums();
 
 it('queues every mailable Sales sends', function (): void {
     $mailables = [];
 
     foreach (glob(dirname(__DIR__).'/src/Mail/*.php') ?: [] as $file) {
-        $class = 'Focal\\Sales\\Mail\\'.basename($file, '.php');
+        $class = 'Odden\\Sales\\Mail\\'.basename($file, '.php');
 
         if (class_exists($class) && is_subclass_of($class, Mailable::class)) {
             $mailables[] = $class;

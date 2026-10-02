@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use Focal\Core\Enums\ActivityStatus;
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Enums\LeadStatus;
-use Focal\Core\Models\Activity;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\ContactLookup;
-use Focal\Sales\Exceptions\MeetingSlotUnavailableException;
-use Focal\Sales\Mail\MeetingBookedMail;
-use Focal\Sales\Mail\SalesMail;
-use Focal\Sales\Models\SalesMeetingBooking;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Models\SalesSequenceEnrollment;
-use Focal\Sales\Services\MeetingAvailability;
+use Odden\Core\Enums\ActivityStatus;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Enums\LeadStatus;
+use Odden\Core\Models\Activity;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\ContactLookup;
+use Odden\Sales\Exceptions\MeetingSlotUnavailableException;
+use Odden\Sales\Mail\MeetingBookedMail;
+use Odden\Sales\Mail\SalesMail;
+use Odden\Sales\Models\SalesMeetingBooking;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Models\SalesSequenceEnrollment;
+use Odden\Sales\Services\MeetingAvailability;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

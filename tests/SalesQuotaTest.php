@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Actions\CalculateQuotaAttainmentAction;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Enums\QuotaPeriod;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\SalesQuota;
+use Odden\Sales\Actions\CalculateQuotaAttainmentAction;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Enums\QuotaPeriod;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\SalesQuota;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesQuotaTest extends TestCase

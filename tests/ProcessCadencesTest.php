@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Enums\LeadStatus;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Actions\EnrollContactInSequenceAction;
-use Focal\Sales\Actions\ProcessCadencesAction;
-use Focal\Sales\Models\SalesEmailTemplate;
-use Focal\Sales\Models\SalesSequence;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Enums\LeadStatus;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Actions\EnrollContactInSequenceAction;
+use Odden\Sales\Actions\ProcessCadencesAction;
+use Odden\Sales\Models\SalesEmailTemplate;
+use Odden\Sales\Models\SalesSequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProcessCadencesTest extends TestCase
@@ -69,7 +69,7 @@ class ProcessCadencesTest extends TestCase
         $this->assertSame(LeadStatus::InProgress, $contact->lead_status);
         $this->assertNotNull($contact->last_contacted_at);
 
-        $this->assertDatabaseHas('focal_activities', [
+        $this->assertDatabaseHas('odden_activities', [
             'subject_type' => $contact->getMorphClass(),
             'subject_id' => $contact->id,
             'type' => ActivityType::Email->value,

@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Support\RouteGroup;
-use Focal\Sales\Http\Controllers\QuoteAcceptanceController;
-use Focal\Sales\Http\Controllers\SalesMeetingBookingController;
+use Odden\Core\Support\RouteGroup;
+use Odden\Sales\Http\Controllers\QuoteAcceptanceController;
+use Odden\Sales\Http\Controllers\SalesMeetingBookingController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(RouteGroup::attributes('focal-sales.routes.web'), function (): void {
+Route::group(RouteGroup::attributes('odden-sales.routes.web'), function (): void {
     // Quotes public e-sign portal
-    Route::get('/quotes/{token}', [QuoteAcceptanceController::class, 'show'])->name('focal.quotes.show');
+    Route::get('/quotes/{token}', [QuoteAcceptanceController::class, 'show'])->name('odden.quotes.show');
     Route::post('/quotes/{token}/accept', [QuoteAcceptanceController::class, 'accept'])
-        ->middleware('throttle:focal-public')
-        ->name('focal.quotes.accept');
+        ->middleware('throttle:odden-public')
+        ->name('odden.quotes.accept');
 
     // Sales reps meeting scheduler
-    Route::get('/meet/{slug}', [SalesMeetingBookingController::class, 'show'])->name('focal.meetings.show');
+    Route::get('/meet/{slug}', [SalesMeetingBookingController::class, 'show'])->name('odden.meetings.show');
     Route::post('/meet/{slug}/book', [SalesMeetingBookingController::class, 'book'])
-        ->middleware('throttle:focal-public')
-        ->name('focal.meetings.book');
+        ->middleware('throttle:odden-public')
+        ->name('odden.meetings.book');
 });

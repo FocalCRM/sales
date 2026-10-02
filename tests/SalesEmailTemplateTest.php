@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Models\SalesEmailTemplate;
+use Odden\Sales\Models\SalesEmailTemplate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesEmailTemplateTest extends TestCase
@@ -15,7 +15,7 @@ class SalesEmailTemplateTest extends TestCase
     {
         $template = SalesEmailTemplate::create([
             'name' => 'Demo Follow-up',
-            'subject' => 'Next steps for {{ company.name }} - Focal CRM',
+            'subject' => 'Next steps for {{ company.name }} - Odden CRM',
             'body_html' => '<p>Hi {{ contact.first_name }},</p><p>Great speaking with you about {{ deal.name }}. The proposal total is ${{ deal.amount }}.</p>',
             'category' => 'follow_up',
             'is_shared' => true,
@@ -28,7 +28,7 @@ class SalesEmailTemplateTest extends TestCase
             'deal.amount' => '12,000',
         ]);
 
-        $this->assertSame('Next steps for Acme Labs - Focal CRM', $rendered['subject']);
+        $this->assertSame('Next steps for Acme Labs - Odden CRM', $rendered['subject']);
         $this->assertStringContainsString('Hi Sarah,', $rendered['body_html']);
         $this->assertStringContainsString('about Annual SaaS Plan.', $rendered['body_html']);
         $this->assertStringContainsString('The proposal total is $12,000.', $rendered['body_html']);

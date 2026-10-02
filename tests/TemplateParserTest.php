@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Enums\LeadStatus;
-use Focal\Core\Models\Company;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\SalesEmailTemplate;
-use Focal\Sales\Services\TemplateParser;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Enums\LeadStatus;
+use Odden\Core\Models\Company;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\SalesEmailTemplate;
+use Odden\Sales\Services\TemplateParser;
+use Odden\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TemplateParserTest extends TestCase

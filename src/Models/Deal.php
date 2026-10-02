@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Models\Company;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\UserModel;
-use Focal\Core\Traits\AuditsProperties;
-use Focal\Core\Traits\BelongsToTeam;
-use Focal\Core\Traits\HasActivities;
-use Focal\Core\Traits\HasAssociations;
-use Focal\Core\Traits\HasCustomProperties;
-use Focal\Sales\Actions\CalculateDealHealthScoreAction;
-use Focal\Sales\Actions\ChangeDealStageAction;
-use Focal\Sales\Actions\SyncDealAmountAction;
-use Focal\Sales\Database\Factories\DealFactory;
-use Focal\Sales\Enums\DealStatus;
+use Odden\Core\Models\Company;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
+use Odden\Core\Traits\AuditsProperties;
+use Odden\Core\Traits\BelongsToTeam;
+use Odden\Core\Traits\HasActivities;
+use Odden\Core\Traits\HasAssociations;
+use Odden\Core\Traits\HasCustomProperties;
+use Odden\Sales\Actions\CalculateDealHealthScoreAction;
+use Odden\Sales\Actions\ChangeDealStageAction;
+use Odden\Sales\Actions\SyncDealAmountAction;
+use Odden\Sales\Database\Factories\DealFactory;
+use Odden\Sales\Enums\DealStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -90,7 +90,7 @@ class Deal extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.deals', 'focal_deals');
+        return config('odden-sales.tables.deals', 'odden_deals');
     }
 
     /**
@@ -160,7 +160,7 @@ class Deal extends Model
     {
         return $this->belongsToMany(
             Contact::class,
-            config('focal-core.tables.associations', 'focal_associations'),
+            config('odden-core.tables.associations', 'odden_associations'),
             'parent_id',
             'child_id'
         )
@@ -179,7 +179,7 @@ class Deal extends Model
     {
         return $this->belongsToMany(
             Company::class,
-            config('focal-core.tables.associations', 'focal_associations'),
+            config('odden-core.tables.associations', 'odden_associations'),
             'parent_id',
             'child_id'
         )

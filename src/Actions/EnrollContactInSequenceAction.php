@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Core\Enums\LeadStatus;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Models\SalesSequence;
-use Focal\Sales\Models\SalesSequenceEnrollment;
+use Odden\Core\Enums\LeadStatus;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Models\SalesSequence;
+use Odden\Sales\Models\SalesSequenceEnrollment;
 
 class EnrollContactInSequenceAction
 {

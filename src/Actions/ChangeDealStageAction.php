@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Events\DealLost;
-use Focal\Sales\Events\DealMovedStage;
-use Focal\Sales\Events\DealWon;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealStageHistory;
-use Focal\Sales\Models\PipelineStage;
-use Focal\Sales\Models\SalesSequenceEnrollment;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Events\DealLost;
+use Odden\Sales\Events\DealMovedStage;
+use Odden\Sales\Events\DealWon;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealStageHistory;
+use Odden\Sales\Models\PipelineStage;
+use Odden\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Support\Facades\DB;
 
 class ChangeDealStageAction
@@ -96,7 +96,7 @@ class ChangeDealStageAction
 
             // Auto-unenroll associated contacts from active outbound cadences on deal closure
             if ($newStatus === DealStatus::Won || $newStatus === DealStatus::Lost) {
-                $contactIds = $deal->contacts()->pluck('focal_contacts.id')->all();
+                $contactIds = $deal->contacts()->pluck('odden_contacts.id')->all();
                 if (! empty($contactIds)) {
                     SalesSequenceEnrollment::query()
                         ->whereIn('contact_id', $contactIds)

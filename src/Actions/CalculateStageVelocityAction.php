@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealStageHistory;
-use Focal\Sales\Models\PipelineStage;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealStageHistory;
+use Odden\Sales\Models\PipelineStage;
 use Illuminate\Database\Eloquent\Collection;
 
 class CalculateStageVelocityAction

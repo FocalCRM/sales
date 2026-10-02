@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Actions\MergeContactsAction;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Models\SalesMeetingBooking;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Models\SalesSequence;
-use Focal\Sales\Models\SalesSequenceEnrollment;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Actions\MergeContactsAction;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Models\SalesMeetingBooking;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Models\SalesSequence;
+use Odden\Sales\Models\SalesSequenceEnrollment;
+use Odden\Sales\Tests\Fixtures\User;
 
 function mergeTestSequence(string $name = 'Outbound'): SalesSequence
 {

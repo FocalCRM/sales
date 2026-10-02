@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Actions\AcceptQuoteAction;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Enums\StageAutomationActionType;
-use Focal\Sales\Exceptions\QuoteNotAcceptableException;
-use Focal\Sales\Exceptions\StageRequirementException;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\PipelineStage;
-use Focal\Sales\Models\Quote;
-use Focal\Sales\Models\StageAutomation;
+use Odden\Sales\Actions\AcceptQuoteAction;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Enums\StageAutomationActionType;
+use Odden\Sales\Exceptions\QuoteNotAcceptableException;
+use Odden\Sales\Exceptions\StageRequirementException;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\PipelineStage;
+use Odden\Sales\Models\Quote;
+use Odden\Sales\Models\StageAutomation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Exceptions;
 use PHPUnit\Framework\Attributes\DataProvider;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Models\Contact;
-use Focal\Sales\Actions\EnrollContactInSequenceAction;
-use Focal\Sales\Models\SalesSequence;
-use Focal\Sales\Models\SalesSequenceEnrollment;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Actions\EnrollContactInSequenceAction;
+use Odden\Sales\Models\SalesSequence;
+use Odden\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesSequenceTest extends TestCase

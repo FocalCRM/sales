@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Services;
+namespace Odden\Sales\Services;
 
-use Focal\Core\Models\Company;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Models\Deal;
+use Odden\Core\Models\Company;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Models\Deal;
 use Illuminate\Database\Eloquent\Model;
 
 class TemplateParser

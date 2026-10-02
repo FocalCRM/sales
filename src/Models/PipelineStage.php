@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Sales\Database\Factories\PipelineStageFactory;
+use Odden\Sales\Database\Factories\PipelineStageFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -52,7 +52,7 @@ class PipelineStage extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.stages', 'focal_pipeline_stages');
+        return config('odden-sales.tables.stages', 'odden_pipeline_stages');
     }
 
     /**

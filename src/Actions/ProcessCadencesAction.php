@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Core\Enums\ActivityStatus;
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Enums\LeadStatus;
-use Focal\Core\Models\Activity;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Mail\SalesMail;
-use Focal\Sales\Mail\SequenceStepMail;
-use Focal\Sales\Models\SalesEmailTemplate;
-use Focal\Sales\Models\SalesSequenceEnrollment;
+use Odden\Core\Enums\ActivityStatus;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Enums\LeadStatus;
+use Odden\Core\Models\Activity;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Mail\SalesMail;
+use Odden\Sales\Mail\SequenceStepMail;
+use Odden\Sales\Models\SalesEmailTemplate;
+use Odden\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -259,7 +259,7 @@ class ProcessCadencesAction
         $ownerEmail = is_string($ownerEmail) && $ownerEmail !== '' ? $ownerEmail : null;
         $ownerName = $owner !== null ? UserModel::displayName($owner, '') : '';
         $ownerName = $ownerName !== '' ? $ownerName : null;
-        $sendAsOwner = (bool) config('focal-sales.mail.sequences.send_as_owner', false) && $ownerEmail !== null;
+        $sendAsOwner = (bool) config('odden-sales.mail.sequences.send_as_owner', false) && $ownerEmail !== null;
 
         SalesMail::to($email, $contact->full_name)->queue(new SequenceStepMail(
             subjectLine: $rendered['subject'],

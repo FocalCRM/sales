@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
 use Carbon\CarbonInterface;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Quote;
-use Focal\Sales\Models\QuoteItem;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Quote;
+use Odden\Sales\Models\QuoteItem;
 use Illuminate\Support\Facades\DB;
 
 class GenerateQuoteFromDealAction

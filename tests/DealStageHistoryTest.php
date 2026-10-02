@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealStageHistory;
-use Focal\Sales\Models\Pipeline;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealStageHistory;
+use Odden\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DealStageHistoryTest extends TestCase
@@ -46,7 +46,7 @@ class DealStageHistoryTest extends TestCase
         // Move to qualification
         $deal->moveToStage($qualificationStage);
 
-        $this->assertDatabaseHas('focal_deal_stage_history', [
+        $this->assertDatabaseHas('odden_deal_stage_history', [
             'deal_id' => $deal->id,
             'from_stage_id' => $discoveryStage->id,
             'to_stage_id' => $qualificationStage->id,

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Enums\QuotaPeriod;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Enums\QuotaPeriod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -45,7 +45,7 @@ class SalesQuota extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.quotas', 'focal_sales_quotas');
+        return config('odden-sales.tables.quotas', 'odden_sales_quotas');
     }
 
     /**

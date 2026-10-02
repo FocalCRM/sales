@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Http\Controllers;
+namespace Odden\Sales\Http\Controllers;
 
 use Carbon\CarbonImmutable;
-use Focal\Sales\Actions\BookMeetingAction;
-use Focal\Sales\Exceptions\MeetingSlotUnavailableException;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Services\MeetingAvailability;
+use Odden\Sales\Actions\BookMeetingAction;
+use Odden\Sales\Exceptions\MeetingSlotUnavailableException;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Services\MeetingAvailability;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +39,7 @@ class SalesMeetingBookingController extends Controller
 
         $slots = $availability->slotsFor($link, $date);
 
-        return view('focal-sales::meetings.book', [
+        return view('odden-sales::meetings.book', [
             'link' => $link,
             'date' => $date,
             'slots' => $slots,
@@ -94,7 +94,7 @@ class SalesMeetingBookingController extends Controller
         $when = $scheduledAt->format('l, F j \a\t g:i A');
 
         return redirect()
-            ->route('focal.meetings.show', ['slug' => $slug])
+            ->route('odden.meetings.show', ['slug' => $slug])
             ->with('status', "Meeting booked for {$when} ({$timezone}). A confirmation with a calendar invite is on its way to {$result['booking']->invitee_email}.");
     }
 }

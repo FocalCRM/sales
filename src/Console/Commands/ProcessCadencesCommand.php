@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Console\Commands;
+namespace Odden\Sales\Console\Commands;
 
-use Focal\Sales\Actions\ProcessCadencesAction;
+use Odden\Sales\Actions\ProcessCadencesAction;
 use Illuminate\Console\Command;
 
 class ProcessCadencesCommand extends Command

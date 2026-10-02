@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Database\Factories;
+namespace Odden\Sales\Database\Factories;
 
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Quote;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Quote;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

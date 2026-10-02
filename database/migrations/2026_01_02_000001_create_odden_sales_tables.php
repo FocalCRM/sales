@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Support\UserModel;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +14,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $pipelinesTable = config('focal-sales.tables.pipelines', 'focal_pipelines');
-        $stagesTable = config('focal-sales.tables.stages', 'focal_pipeline_stages');
-        $dealsTable = config('focal-sales.tables.deals', 'focal_deals');
-        $historyTable = config('focal-sales.tables.stage_history', 'focal_deal_stage_history');
+        $pipelinesTable = config('odden-sales.tables.pipelines', 'odden_pipelines');
+        $stagesTable = config('odden-sales.tables.stages', 'odden_pipeline_stages');
+        $dealsTable = config('odden-sales.tables.deals', 'odden_deals');
+        $historyTable = config('odden-sales.tables.stage_history', 'odden_deal_stage_history');
 
         Schema::create($pipelinesTable, function (Blueprint $table): void {
             $table->id();
@@ -85,9 +85,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('focal-sales.tables.stage_history', 'focal_deal_stage_history'));
-        Schema::dropIfExists(config('focal-sales.tables.deals', 'focal_deals'));
-        Schema::dropIfExists(config('focal-sales.tables.stages', 'focal_pipeline_stages'));
-        Schema::dropIfExists(config('focal-sales.tables.pipelines', 'focal_pipelines'));
+        Schema::dropIfExists(config('odden-sales.tables.stage_history', 'odden_deal_stage_history'));
+        Schema::dropIfExists(config('odden-sales.tables.deals', 'odden_deals'));
+        Schema::dropIfExists(config('odden-sales.tables.stages', 'odden_pipeline_stages'));
+        Schema::dropIfExists(config('odden-sales.tables.pipelines', 'odden_pipelines'));
     }
 };

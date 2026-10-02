@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Support\UserModel;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,14 +14,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $pipelinesTable = config('focal-sales.tables.pipelines', 'focal_pipelines');
-        $stagesTable = config('focal-sales.tables.stages', 'focal_pipeline_stages');
-        $dealsTable = config('focal-sales.tables.deals', 'focal_deals');
-        $quotesTable = config('focal-sales.tables.quotes', 'focal_quotes');
-        $quoteItemsTable = config('focal-sales.tables.quote_items', 'focal_quote_items');
-        $automationsTable = config('focal-sales.tables.automations', 'focal_stage_automations');
-        $quotasTable = config('focal-sales.tables.quotas', 'focal_sales_quotas');
-        $templatesTable = config('focal-sales.tables.email_templates', 'focal_sales_email_templates');
+        $pipelinesTable = config('odden-sales.tables.pipelines', 'odden_pipelines');
+        $stagesTable = config('odden-sales.tables.stages', 'odden_pipeline_stages');
+        $dealsTable = config('odden-sales.tables.deals', 'odden_deals');
+        $quotesTable = config('odden-sales.tables.quotes', 'odden_quotes');
+        $quoteItemsTable = config('odden-sales.tables.quote_items', 'odden_quote_items');
+        $automationsTable = config('odden-sales.tables.automations', 'odden_stage_automations');
+        $quotasTable = config('odden-sales.tables.quotas', 'odden_sales_quotas');
+        $templatesTable = config('odden-sales.tables.email_templates', 'odden_sales_email_templates');
 
         // 1. Quotes Table
         Schema::create($quotesTable, function (Blueprint $table) use ($dealsTable): void {
@@ -114,10 +114,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('focal-sales.tables.email_templates', 'focal_sales_email_templates'));
-        Schema::dropIfExists(config('focal-sales.tables.quotas', 'focal_sales_quotas'));
-        Schema::dropIfExists(config('focal-sales.tables.automations', 'focal_stage_automations'));
-        Schema::dropIfExists(config('focal-sales.tables.quote_items', 'focal_quote_items'));
-        Schema::dropIfExists(config('focal-sales.tables.quotes', 'focal_quotes'));
+        Schema::dropIfExists(config('odden-sales.tables.email_templates', 'odden_sales_email_templates'));
+        Schema::dropIfExists(config('odden-sales.tables.quotas', 'odden_sales_quotas'));
+        Schema::dropIfExists(config('odden-sales.tables.automations', 'odden_stage_automations'));
+        Schema::dropIfExists(config('odden-sales.tables.quote_items', 'odden_quote_items'));
+        Schema::dropIfExists(config('odden-sales.tables.quotes', 'odden_quotes'));
     }
 };

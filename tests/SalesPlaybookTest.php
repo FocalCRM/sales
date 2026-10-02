@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Sales\Actions\ExecuteSalesPlaybookAction;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\SalesPlaybook;
+use Odden\Core\Enums\ActivityType;
+use Odden\Sales\Actions\ExecuteSalesPlaybookAction;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\SalesPlaybook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesPlaybookTest extends TestCase
@@ -40,7 +40,7 @@ class SalesPlaybookTest extends TestCase
         $this->assertSame('Final Economic Buyer', $deal->getProperty('qualification_authority'));
         $this->assertSame('This Quarter (1-3 months)', $deal->getProperty('qualification_timeline'));
 
-        $this->assertDatabaseHas('focal_activities', [
+        $this->assertDatabaseHas('odden_activities', [
             'subject_type' => $deal->getMorphClass(),
             'subject_id' => $deal->id,
             'type' => ActivityType::Note->value,

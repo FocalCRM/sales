@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Actions\GenerateQuoteFromDealAction;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealProduct;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\Quote;
+use Odden\Sales\Actions\GenerateQuoteFromDealAction;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealProduct;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\Quote;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class QuoteTest extends TestCase
@@ -26,8 +26,8 @@ class QuoteTest extends TestCase
 
         DealProduct::create([
             'deal_id' => $deal->id,
-            'name' => 'Focal Enterprise License',
-            'sku' => 'FOCAL-ENT',
+            'name' => 'Odden Enterprise License',
+            'sku' => 'ODDEN-ENT',
             'unit_price' => 12000.00,
             'quantity' => 1,
             'discount_percent' => 0.00,

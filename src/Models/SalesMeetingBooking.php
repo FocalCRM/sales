@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Models\Activity;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\UserModel;
+use Odden\Core\Models\Activity;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -60,7 +60,7 @@ class SalesMeetingBooking extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.meeting_bookings', 'focal_sales_meeting_bookings');
+        return config('odden-sales.tables.meeting_bookings', 'odden_sales_meeting_bookings');
     }
 
     /**

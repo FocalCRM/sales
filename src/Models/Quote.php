@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Database\Factories\QuoteFactory;
-use Focal\Sales\Enums\QuoteStatus;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Database\Factories\QuoteFactory;
+use Odden\Sales\Enums\QuoteStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -79,7 +79,7 @@ class Quote extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.quotes', 'focal_quotes');
+        return config('odden-sales.tables.quotes', 'odden_quotes');
     }
 
     /**

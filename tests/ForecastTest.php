@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Sales\Actions\CalculatePipelineForecastAction;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
+use Odden\Sales\Actions\CalculatePipelineForecastAction;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ForecastTest extends TestCase

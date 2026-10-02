@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Enums\LeadStatus;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Actions\RouteLeadAction;
-use Focal\Sales\Enums\LeadRoutingStrategy;
-use Focal\Sales\Models\LeadRoutingRule;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Enums\LeadStatus;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Actions\RouteLeadAction;
+use Odden\Sales\Enums\LeadRoutingStrategy;
+use Odden\Sales\Models\LeadRoutingRule;
+use Odden\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LeadRoutingTest extends TestCase
@@ -48,7 +48,7 @@ class LeadRoutingTest extends TestCase
         $this->assertSame($rep1->id, $result2['assigned_user_id']);
         $this->assertSame($rep1->id, $contact2->fresh()->owner_id);
 
-        $this->assertDatabaseHas('focal_activities', [
+        $this->assertDatabaseHas('odden_activities', [
             'subject_type' => $contact1->getMorphClass(),
             'subject_id' => $contact1->id,
             'type' => ActivityType::Note->value,

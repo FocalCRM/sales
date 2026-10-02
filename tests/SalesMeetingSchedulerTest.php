@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Services\MeetingAvailability;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Services\MeetingAvailability;
+use Odden\Sales\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SalesMeetingSchedulerTest extends TestCase
@@ -65,7 +65,7 @@ class SalesMeetingSchedulerTest extends TestCase
         $this->assertSame('Kent', $contact->last_name);
         $this->assertSame($user->id, $contact->owner_id);
 
-        $this->assertDatabaseHas('focal_activities', [
+        $this->assertDatabaseHas('odden_activities', [
             'subject_type' => $contact->getMorphClass(),
             'subject_id' => $contact->id,
             'type' => ActivityType::Meeting->value,

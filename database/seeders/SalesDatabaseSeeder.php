@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Database\Seeders;
+namespace Odden\Sales\Database\Seeders;
 
-use Focal\Core\Models\Company;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Enums\LeadRoutingStrategy;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\DealStageHistory;
-use Focal\Sales\Models\LeadRoutingRule;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\PipelineStage;
-use Focal\Sales\Models\Quote;
-use Focal\Sales\Models\QuoteItem;
-use Focal\Sales\Models\SalesEmailTemplate;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Models\SalesPlaybook;
-use Focal\Sales\Models\SalesSequence;
-use Focal\Sales\Models\SalesSequenceEnrollment;
+use Odden\Core\Models\Company;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Enums\LeadRoutingStrategy;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\DealStageHistory;
+use Odden\Sales\Models\LeadRoutingRule;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\PipelineStage;
+use Odden\Sales\Models\Quote;
+use Odden\Sales\Models\QuoteItem;
+use Odden\Sales\Models\SalesEmailTemplate;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Models\SalesPlaybook;
+use Odden\Sales\Models\SalesSequence;
+use Odden\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Database\Seeder;
 
 class SalesDatabaseSeeder extends Seeder
@@ -33,17 +33,17 @@ class SalesDatabaseSeeder extends Seeder
     {
         // 1. Ensure Sales Rep Users
         $admin = UserModel::query()->firstOrCreate(
-            ['email' => 'admin@focal.test'],
-            ['name' => 'Focal Admin', 'password' => bcrypt('password')]
+            ['email' => 'admin@odden.test'],
+            ['name' => 'Odden Admin', 'password' => bcrypt('password')]
         );
 
         $repBeth = UserModel::query()->firstOrCreate(
-            ['email' => 'beth.caldwell@focal.test'],
+            ['email' => 'beth.caldwell@odden.test'],
             ['name' => 'Beth Caldwell', 'password' => bcrypt('password')]
         );
 
         $repMark = UserModel::query()->firstOrCreate(
-            ['email' => 'mark.hunter@focal.test'],
+            ['email' => 'mark.hunter@odden.test'],
             ['name' => 'Mark Hunter', 'password' => bcrypt('password')]
         );
 
@@ -63,7 +63,7 @@ class SalesDatabaseSeeder extends Seeder
             ['name' => 'Cold Outbound - Enterprise Intro'],
             [
                 'subject' => 'Accelerating growth for {{ contact.company_name }}',
-                'body_html' => '<p>Hi {{ contact.first_name }},</p><p>I noticed your recent expansion at {{ contact.company_name }}. At Focal, we help enterprise sales teams accelerate cycle times by 35%.</p><p>Would you have 15 minutes this week for a brief introductory conversation?</p><p>Best regards,<br>{{ user.name }}</p>',
+                'body_html' => '<p>Hi {{ contact.first_name }},</p><p>I noticed your recent expansion at {{ contact.company_name }}. At Odden, we help enterprise sales teams accelerate cycle times by 35%.</p><p>Would you have 15 minutes this week for a brief introductory conversation?</p><p>Best regards,<br>{{ user.name }}</p>',
                 'category' => 'outbound',
                 'user_id' => $repBeth->getKey(),
                 'is_shared' => true,
@@ -73,7 +73,7 @@ class SalesDatabaseSeeder extends Seeder
         $templateFollowup = SalesEmailTemplate::firstOrCreate(
             ['name' => 'Inbound Fast Response'],
             [
-                'subject' => 'Thanks for checking out Focal, {{ contact.first_name }}!',
+                'subject' => 'Thanks for checking out Odden, {{ contact.first_name }}!',
                 'body_html' => '<p>Hi {{ contact.first_name }},</p><p>Thanks for requesting details on our platform. I’d love to learn more about your current tech stack and share a customized demo.</p><p>Feel free to grab a time that works on my calendar.</p><p>Best regards,<br>{{ user.name }}</p>',
                 'category' => 'inbound',
                 'user_id' => $repBeth->getKey(),
@@ -288,7 +288,7 @@ class SalesDatabaseSeeder extends Seeder
                 );
 
                 QuoteItem::firstOrCreate(
-                    ['quote_id' => $quote->id, 'name' => 'Focal Enterprise Seat (Annual)'],
+                    ['quote_id' => $quote->id, 'name' => 'Odden Enterprise Seat (Annual)'],
                     [
                         'quantity' => 100,
                         'unit_price' => 1800.00,

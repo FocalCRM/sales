@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\Models\Contact;
-use Focal\Sales\Enums\StageAutomationActionType;
-use Focal\Sales\Exceptions\StageRequirementException;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\Pipeline;
-use Focal\Sales\Models\StageAutomation;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Enums\StageAutomationActionType;
+use Odden\Sales\Exceptions\StageRequirementException;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\Pipeline;
+use Odden\Sales\Models\StageAutomation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StageAutomationTest extends TestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -47,7 +47,7 @@ class QuoteItem extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.quote_items', 'focal_quote_items');
+        return config('odden-sales.tables.quote_items', 'odden_quote_items');
     }
 
     /**

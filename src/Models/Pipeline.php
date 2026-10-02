@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Traits\BelongsToTeam;
-use Focal\Sales\Actions\CalculatePipelineForecastAction;
-use Focal\Sales\Database\Factories\PipelineFactory;
+use Odden\Core\Traits\BelongsToTeam;
+use Odden\Sales\Actions\CalculatePipelineForecastAction;
+use Odden\Sales\Database\Factories\PipelineFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,7 +50,7 @@ class Pipeline extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.pipelines', 'focal_pipelines');
+        return config('odden-sales.tables.pipelines', 'odden_pipelines');
     }
 
     /**

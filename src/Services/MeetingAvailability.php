@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Services;
+namespace Odden\Sales\Services;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use Focal\Sales\Models\SalesMeetingBooking;
-use Focal\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Models\SalesMeetingBooking;
+use Odden\Sales\Models\SalesMeetingLink;
 
 /**
  * Computes the open booking slots of a meeting link.
  *
  * Working hours are a map of lowercase English day names to lists of "HH:MM-HH:MM" windows in the
  * link's timezone, for example ['monday' => ['09:00-12:00', '13:00-17:00']]. Days that are missing
- * or empty have no slots. A link without working hours uses focal-sales.meetings.default_working_hours.
+ * or empty have no slots. A link without working hours uses odden-sales.meetings.default_working_hours.
  *
  * Slots start at the beginning of each window and repeat every duration + buffer minutes while the
  * meeting still ends inside the window. Slots in the past, beyond the booking window, or overlapping
@@ -34,7 +34,7 @@ class MeetingAvailability
         $hours = $link->working_hours;
 
         if (! is_array($hours) || $hours === []) {
-            $hours = config('focal-sales.meetings.default_working_hours', []);
+            $hours = config('odden-sales.meetings.default_working_hours', []);
         }
 
         $normalized = [];
@@ -169,7 +169,7 @@ class MeetingAvailability
      */
     public function lastBookableDate(SalesMeetingLink $link): CarbonImmutable
     {
-        $days = max(0, (int) config('focal-sales.meetings.booking_window_days', 60));
+        $days = max(0, (int) config('odden-sales.meetings.booking_window_days', 60));
 
         return CarbonImmutable::now($link->timezoneName())->startOfDay()->addDays($days);
     }

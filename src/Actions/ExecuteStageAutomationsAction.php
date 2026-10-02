@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Enums\StageAutomationActionType;
-use Focal\Sales\Exceptions\StageRequirementException;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\PipelineStage;
-use Focal\Sales\Models\StageAutomation;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Enums\StageAutomationActionType;
+use Odden\Sales\Exceptions\StageRequirementException;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\PipelineStage;
+use Odden\Sales\Models\StageAutomation;
 use Illuminate\Database\Eloquent\Collection;
 
 class ExecuteStageAutomationsAction

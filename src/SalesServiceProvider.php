@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales;
+namespace Odden\Sales;
 
-use Focal\Core\Events\ContactsMerged;
-use Focal\Core\Models\Company;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Console\Commands\ExpireStaleQuotesCommand;
-use Focal\Sales\Console\Commands\ProcessCadencesCommand;
-use Focal\Sales\Listeners\MoveMergedRecords;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\SalesSequenceEnrollment;
+use Odden\Core\Events\ContactsMerged;
+use Odden\Core\Models\Company;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Console\Commands\ExpireStaleQuotesCommand;
+use Odden\Sales\Console\Commands\ProcessCadencesCommand;
+use Odden\Sales\Listeners\MoveMergedRecords;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\SalesSequenceEnrollment;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,8 +23,8 @@ class SalesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/focal-sales.php',
-            'focal-sales'
+            __DIR__.'/../config/odden-sales.php',
+            'odden-sales'
         );
     }
 
@@ -34,8 +34,8 @@ class SalesServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'focal-sales');
-        if (config('focal-sales.routes.enabled', true)) {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'odden-sales');
+        if (config('odden-sales.routes.enabled', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
 
@@ -43,7 +43,7 @@ class SalesServiceProvider extends ServiceProvider
             Contact::resolveRelationUsing('deals', function (Contact $contact) {
                 return $contact->belongsToMany(
                     Deal::class,
-                    config('focal-core.tables.associations', 'focal_associations'),
+                    config('odden-core.tables.associations', 'odden_associations'),
                     'child_id',
                     'parent_id'
                 )
@@ -62,7 +62,7 @@ class SalesServiceProvider extends ServiceProvider
             Company::resolveRelationUsing('deals', function (Company $company) {
                 return $company->belongsToMany(
                     Deal::class,
-                    config('focal-core.tables.associations', 'focal_associations'),
+                    config('odden-core.tables.associations', 'odden_associations'),
                     'child_id',
                     'parent_id'
                 )
@@ -83,12 +83,12 @@ class SalesServiceProvider extends ServiceProvider
             ]);
 
             $this->publishes([
-                __DIR__.'/../config/focal-sales.php' => config_path('focal-sales.php'),
-            ], 'focal-sales-config');
+                __DIR__.'/../config/odden-sales.php' => config_path('odden-sales.php'),
+            ], 'odden-sales-config');
 
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'focal-sales-migrations');
+            ], 'odden-sales-migrations');
         }
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Support\UserModel;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $meetingLinksTable = config('focal-sales.tables.meeting_links', 'focal_sales_meeting_links');
-        $bookingsTable = config('focal-sales.tables.meeting_bookings', 'focal_sales_meeting_bookings');
-        $contactsTable = config('focal-core.tables.contacts', 'focal_contacts');
+        $meetingLinksTable = config('odden-sales.tables.meeting_links', 'odden_sales_meeting_links');
+        $bookingsTable = config('odden-sales.tables.meeting_bookings', 'odden_sales_meeting_bookings');
+        $contactsTable = config('odden-core.tables.contacts', 'odden_contacts');
 
         Schema::table($meetingLinksTable, function (Blueprint $table): void {
             $table->unsignedInteger('buffer_minutes')->default(0)->after('duration_minutes');
@@ -47,9 +47,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('focal-sales.tables.meeting_bookings', 'focal_sales_meeting_bookings'));
+        Schema::dropIfExists(config('odden-sales.tables.meeting_bookings', 'odden_sales_meeting_bookings'));
 
-        Schema::table(config('focal-sales.tables.meeting_links', 'focal_sales_meeting_links'), function (Blueprint $table): void {
+        Schema::table(config('odden-sales.tables.meeting_links', 'odden_sales_meeting_links'), function (Blueprint $table): void {
             $table->dropColumn(['buffer_minutes', 'timezone']);
         });
     }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Tests;
+namespace Odden\Sales\Tests;
 
-use Focal\Core\CoreServiceProvider;
-use Focal\Sales\SalesServiceProvider;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\CoreServiceProvider;
+use Odden\Sales\SalesServiceProvider;
+use Odden\Sales\Tests\Fixtures\User;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 use function Orchestra\Testbench\after_resolving;

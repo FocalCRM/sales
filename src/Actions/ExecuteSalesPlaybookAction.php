@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Models\Deal;
-use Focal\Sales\Models\SalesPlaybook;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Models\Deal;
+use Odden\Sales\Models\SalesPlaybook;
 
 class ExecuteSalesPlaybookAction
 {

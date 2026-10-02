@@ -1,32 +1,32 @@
 {
-    "name": "focalcrm/sales",
-    "description": "Sales, Deals, and Pipeline Management for Focal CRM",
+    "name": "getodden/crm-sales",
+    "description": "Sales, Deals, and Pipeline Management for Odden CRM",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "laravel",
         "crm",
-        "focalcrm",
+        "getodden",
         "sales",
         "pipeline",
         "deals",
         "quotes",
         "forecasting"
     ],
-    "homepage": "https://focalcrm.io",
+    "homepage": "https://odden.io",
     "support": {
-        "issues": "https://github.com/focalcrm/focal/issues",
-        "source": "https://github.com/focalcrm/focal"
+        "issues": "https://github.com/getodden/crm/issues",
+        "source": "https://github.com/getodden/crm"
     },
     "authors": [
         {
             "name": "CaskStack, LLC",
-            "homepage": "https://focalcrm.io"
+            "homepage": "https://odden.io"
         }
     ],
     "require": {
         "php": "^8.3",
-        "focalcrm/core": "self.version",
+        "getodden/crm-core": "self.version",
         "laravel/framework": "^12.0 || ^13.0"
     },
     "require-dev": {
@@ -45,13 +45,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Focal\\Sales\\": "src/",
-            "Focal\\Sales\\Database\\Factories\\": "database/factories/"
+            "Odden\\Sales\\": "src/",
+            "Odden\\Sales\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Focal\\Sales\\Tests\\": "tests/"
+            "Odden\\Sales\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -60,7 +60,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Focal\\Sales\\SalesServiceProvider"
+                "Odden\\Sales\\SalesServiceProvider"
             ]
         },
         "branch-alias": {

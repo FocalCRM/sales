@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Actions;
+namespace Odden\Sales\Actions;
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Sales\Enums\DealStatus;
-use Focal\Sales\Enums\QuoteStatus;
-use Focal\Sales\Exceptions\QuoteNotAcceptableException;
-use Focal\Sales\Models\PipelineStage;
-use Focal\Sales\Models\Quote;
+use Odden\Core\Enums\ActivityType;
+use Odden\Sales\Enums\DealStatus;
+use Odden\Sales\Enums\QuoteStatus;
+use Odden\Sales\Exceptions\QuoteNotAcceptableException;
+use Odden\Sales\Models\PipelineStage;
+use Odden\Sales\Models\Quote;
 use Illuminate\Support\Facades\DB;
 
 class AcceptQuoteAction

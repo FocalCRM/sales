@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\UserModel;
-use Focal\Sales\Services\TemplateParser;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
+use Odden\Sales\Services\TemplateParser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -43,7 +43,7 @@ class SalesEmailTemplate extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.email_templates', 'focal_sales_email_templates');
+        return config('odden-sales.tables.email_templates', 'odden_sales_email_templates');
     }
 
     /**

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Enums\ActivityType;
-use Focal\Core\Models\Activity;
-use Focal\Core\Models\Contact;
-use Focal\Sales\Actions\BookMeetingAction;
-use Focal\Sales\Exceptions\MeetingSlotUnavailableException;
-use Focal\Sales\Mail\MeetingBookedMail;
-use Focal\Sales\Models\SalesMeetingBooking;
-use Focal\Sales\Models\SalesMeetingLink;
-use Focal\Sales\Services\MeetingAvailability;
-use Focal\Sales\Services\MeetingInvite;
-use Focal\Sales\Tests\Fixtures\User;
+use Odden\Core\Enums\ActivityType;
+use Odden\Core\Models\Activity;
+use Odden\Core\Models\Contact;
+use Odden\Sales\Actions\BookMeetingAction;
+use Odden\Sales\Exceptions\MeetingSlotUnavailableException;
+use Odden\Sales\Mail\MeetingBookedMail;
+use Odden\Sales\Models\SalesMeetingBooking;
+use Odden\Sales\Models\SalesMeetingLink;
+use Odden\Sales\Services\MeetingAvailability;
+use Odden\Sales\Services\MeetingInvite;
+use Odden\Sales\Tests\Fixtures\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\MailManager;
 use Illuminate\Support\Carbon;
@@ -25,7 +25,7 @@ beforeEach(function (): void {
     Carbon::setTestNow(Carbon::parse('2030-01-06 08:00:00', 'UTC'));
     Mail::fake();
 
-    $this->host = User::factory()->create(['name' => 'Beth Caldwell', 'email' => 'beth@focal.test']);
+    $this->host = User::factory()->create(['name' => 'Beth Caldwell', 'email' => 'beth@odden.test']);
 
     $this->makeLink = fn (array $attributes = []): SalesMeetingLink => SalesMeetingLink::query()->create(array_merge([
         'user_id' => $this->host->id,
@@ -124,7 +124,7 @@ it('records the booking and queues confirmations with an ics invite to host and 
     expect(is_subclass_of(MeetingBookedMail::class, ShouldQueue::class))->toBeTrue();
     Mail::assertQueuedCount(2);
 
-    foreach (['dana@example.com', 'beth@focal.test'] as $recipient) {
+    foreach (['dana@example.com', 'beth@odden.test'] as $recipient) {
         Mail::assertQueued(MeetingBookedMail::class, function (MeetingBookedMail $mail) use ($recipient): bool {
             if (! $mail->hasTo($recipient)) {
                 return false;
@@ -136,7 +136,7 @@ it('records the booking and queues confirmations with an ics invite to host and 
             return str_contains($ics, 'BEGIN:VCALENDAR')
                 && str_contains($ics, 'DTSTART:20300107T093000Z')
                 && str_contains($ics, 'DTEND:20300107T100000Z')
-                && str_contains($ics, 'mailto:beth@focal.test')
+                && str_contains($ics, 'mailto:beth@odden.test')
                 && str_contains($ics, 'mailto:dana@example.com')
                 && $mail->hasAttachedData($ics, 'invite.ics', ['mime' => 'text/calendar; charset=UTF-8; method=REQUEST']);
         });

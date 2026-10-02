@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Focal\Sales\Models;
+namespace Odden\Sales\Models;
 
 use Carbon\CarbonInterface;
-use Focal\Core\Models\Contact;
-use Focal\Core\Support\UserModel;
+use Odden\Core\Models\Contact;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -45,7 +45,7 @@ class SalesSequenceEnrollment extends Model
      */
     public function getTable(): string
     {
-        return config('focal-sales.tables.sequence_enrollments', 'focal_sales_sequence_enrollments');
+        return config('odden-sales.tables.sequence_enrollments', 'odden_sales_sequence_enrollments');
     }
 
     /**

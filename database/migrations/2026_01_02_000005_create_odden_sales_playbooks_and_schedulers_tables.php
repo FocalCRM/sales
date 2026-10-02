@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Focal\Core\Support\UserModel;
+use Odden\Core\Support\UserModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $playbooksTable = config('focal-sales.tables.playbooks', 'focal_sales_playbooks');
-        $meetingLinksTable = config('focal-sales.tables.meeting_links', 'focal_sales_meeting_links');
-        $routingRulesTable = config('focal-sales.tables.lead_routing_rules', 'focal_sales_lead_routing_rules');
+        $playbooksTable = config('odden-sales.tables.playbooks', 'odden_sales_playbooks');
+        $meetingLinksTable = config('odden-sales.tables.meeting_links', 'odden_sales_meeting_links');
+        $routingRulesTable = config('odden-sales.tables.lead_routing_rules', 'odden_sales_lead_routing_rules');
 
         if (! Schema::hasTable($playbooksTable)) {
             Schema::create($playbooksTable, function (Blueprint $table): void {
@@ -67,8 +67,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('focal-sales.tables.lead_routing_rules', 'focal_sales_lead_routing_rules'));
-        Schema::dropIfExists(config('focal-sales.tables.meeting_links', 'focal_sales_meeting_links'));
-        Schema::dropIfExists(config('focal-sales.tables.playbooks', 'focal_sales_playbooks'));
+        Schema::dropIfExists(config('odden-sales.tables.lead_routing_rules', 'odden_sales_lead_routing_rules'));
+        Schema::dropIfExists(config('odden-sales.tables.meeting_links', 'odden_sales_meeting_links'));
+        Schema::dropIfExists(config('odden-sales.tables.playbooks', 'odden_sales_playbooks'));
     }
 };
