@@ -12,16 +12,35 @@ use Illuminate\Database\Eloquent\Model;
 class TemplateParser
 {
     /**
-     * Parse a template string by replacing {{ variable }} merge tags.
+     * Parse a plain-text template string (e.g. a subject) by replacing {{ variable }} merge tags.
+     * Values are inserted as-is; use parseHtml() for HTML output.
      *
      * @param  array<string, mixed>  $context
      */
     public function parse(string $template, array $context = []): string
     {
-        return (string) preg_replace_callback('/\{\{\s*([a-zA-Z0-9_.]+)\s*\}\}/', function (array $matches) use ($context): string {
-            $key = $matches[1];
+        return $this->replaceTags($template, $context, escape: false);
+    }
 
-            return (string) ($this->resolveValue($key, $context) ?? '');
+    /**
+     * Parse an HTML template string (e.g. body_html), HTML-escaping each merge value.
+     *
+     * @param  array<string, mixed>  $context
+     */
+    public function parseHtml(string $template, array $context = []): string
+    {
+        return $this->replaceTags($template, $context, escape: true);
+    }
+
+    /**
+     * @param  array<string, mixed>  $context
+     */
+    protected function replaceTags(string $template, array $context, bool $escape): string
+    {
+        return (string) preg_replace_callback('/\{\{\s*([a-zA-Z0-9_.]+)\s*\}\}/', function (array $matches) use ($context, $escape): string {
+            $value = (string) ($this->resolveValue($matches[1], $context) ?? '');
+
+            return $escape ? e($value) : $value;
         }, $template);
     }
 

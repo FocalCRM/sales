@@ -7,6 +7,7 @@ namespace Focal\Sales\Http\Controllers;
 use Focal\Core\Enums\ActivityType;
 use Focal\Sales\Actions\AcceptQuoteAction;
 use Focal\Sales\Enums\QuoteStatus;
+use Focal\Sales\Exceptions\QuoteNotAcceptableException;
 use Focal\Sales\Models\Quote;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -76,10 +77,17 @@ class QuoteAcceptanceController extends Controller
             return redirect()
                 ->route('focal.quotes.show', ['token' => $token])
                 ->with('status', 'Quote proposal accepted and successfully signed!');
-        } catch (\Throwable $e) {
+        } catch (QuoteNotAcceptableException $e) {
             return redirect()
                 ->route('focal.quotes.show', ['token' => $token])
                 ->withErrors(['error' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            // Internal failures (e.g. a won-stage requirement) are logged; the public visitor gets a generic message.
+            report($e);
+
+            return redirect()
+                ->route('focal.quotes.show', ['token' => $token])
+                ->withErrors(['error' => 'We could not complete the acceptance of this proposal. Please contact your sales representative.']);
         }
     }
 }

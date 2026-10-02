@@ -365,7 +365,9 @@
             <div>
                 @if ($quote->status === \Focal\Sales\Enums\QuoteStatus::Accepted)
                     <span class="status-badge accepted">&#10003; Accepted & Signed</span>
-                @elseif ($quote->expires_at && $quote->expires_at->isPast())
+                @elseif ($quote->status === \Focal\Sales\Enums\QuoteStatus::Declined)
+                    <span class="status-badge expired">Declined</span>
+                @elseif (! $quote->isAcceptable())
                     <span class="status-badge expired">Expired</span>
                 @else
                     <span class="status-badge sent">Awaiting Acceptance</span>
@@ -505,12 +507,24 @@
                         Legal Audit Token: <code>{{ $quote->public_token }}</code>
                     </div>
                 </div>
-            @elseif ($quote->expires_at && $quote->expires_at->isPast())
+            @elseif (! $quote->isAcceptable())
                 <div class="signature-section" style="background: #fef2f2; border-color: #fca5a5;">
-                    <div class="sig-title" style="color: #b91c1c;">Proposal Expired</div>
-                    <p class="sig-subtitle" style="color: #991b1b;">
-                        This quote expired on {{ $quote->expires_at->format('F j, Y') }}. Please reach out to your sales representative to request an updated proposal.
-                    </p>
+                    @if ($quote->status === \Focal\Sales\Enums\QuoteStatus::Declined)
+                        <div class="sig-title" style="color: #b91c1c;">Proposal Declined</div>
+                        <p class="sig-subtitle" style="color: #991b1b;">
+                            This quote was declined and is no longer available for acceptance. Please reach out to your sales representative to request an updated proposal.
+                        </p>
+                    @else
+                        <div class="sig-title" style="color: #b91c1c;">Proposal Expired</div>
+                        <p class="sig-subtitle" style="color: #991b1b;">
+                            @if ($quote->expires_at)
+                                This quote expired on {{ $quote->expires_at->format('F j, Y') }} and is no longer available for acceptance.
+                            @else
+                                This quote has expired and is no longer available for acceptance.
+                            @endif
+                            Please reach out to your sales representative to request an updated proposal.
+                        </p>
+                    @endif
                 </div>
             @else
                 <div class="signature-section">

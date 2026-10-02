@@ -29,12 +29,10 @@ class ExpireStaleQuotesCommand extends Command
      */
     public function handle(): int
     {
-        $today = now()->startOfDay();
-
+        // Same rule as public acceptance: a quote is valid through its expiry day.
         $expiredCount = Quote::query()
             ->whereIn('status', [QuoteStatus::Draft, QuoteStatus::Sent, QuoteStatus::Approved])
-            ->whereNotNull('expires_at')
-            ->whereDate('expires_at', '<', $today)
+            ->pastExpiryDate()
             ->update([
                 'status' => QuoteStatus::Expired,
             ]);

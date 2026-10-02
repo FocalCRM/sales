@@ -8,6 +8,7 @@ use Carbon\CarbonInterface;
 use Focal\Core\Support\UserModel;
 use Focal\Sales\Database\Factories\QuoteFactory;
 use Focal\Sales\Enums\QuoteStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -173,11 +174,34 @@ class Quote extends Model
             return false;
         }
 
-        if ($this->expires_at === null) {
-            return false;
-        }
+        return $this->status === QuoteStatus::Expired || $this->hasPassedExpiryDate();
+    }
 
-        return $this->expires_at->isPast();
+    /**
+     * Whether the expiry date has passed. A quote stays valid through the whole of its expiry day.
+     */
+    public function hasPassedExpiryDate(): bool
+    {
+        return $this->expires_at !== null && $this->expires_at->toDateString() < today()->toDateString();
+    }
+
+    /**
+     * Whether the quote can still be accepted: not accepted, declined or expired, and not past its expiry date.
+     */
+    public function isAcceptable(): bool
+    {
+        return ! $this->status->isTerminal() && ! $this->hasPassedExpiryDate();
+    }
+
+    /**
+     * Scope query to quotes whose expiry date has passed (the same rule as hasPassedExpiryDate()).
+     *
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
+    public function scopePastExpiryDate(Builder $query): Builder
+    {
+        return $query->whereNotNull('expires_at')->whereDate('expires_at', '<', today()->toDateString());
     }
 
     /**

@@ -7,44 +7,76 @@ namespace Focal\Sales\Actions;
 use Focal\Core\Enums\ActivityType;
 use Focal\Sales\Enums\DealStatus;
 use Focal\Sales\Enums\QuoteStatus;
+use Focal\Sales\Exceptions\QuoteNotAcceptableException;
 use Focal\Sales\Models\PipelineStage;
 use Focal\Sales\Models\Quote;
-use InvalidArgumentException;
+use Illuminate\Support\Facades\DB;
 
 class AcceptQuoteAction
 {
     /**
      * Accept and sign a quote via public token.
+     *
+     * The quote acceptance and the deal's move to won happen in one transaction, so a failing
+     * won-stage requirement leaves both the quote and the deal unchanged.
+     *
+     * @throws QuoteNotAcceptableException
      */
     public function execute(string $token, string $signedByName, string $signedByEmail): Quote
     {
         /** @var Quote|null $quote */
-        $quote = Quote::query()
-            ->where('public_token', $token)
-            ->with(['deal.pipeline.stages', 'deal.contacts'])
-            ->first();
+        $quote = Quote::query()->where('public_token', $token)->first();
 
         if ($quote === null) {
-            throw new InvalidArgumentException('Invalid or expired quote link.');
+            throw new QuoteNotAcceptableException('Invalid or expired quote link.');
         }
 
-        if ($quote->status === QuoteStatus::Accepted) {
-            return $quote;
+        $this->ensureAcceptable($quote);
+
+        return DB::transaction(function () use ($token, $signedByName, $signedByEmail): Quote {
+            /** @var Quote $quote */
+            $quote = Quote::query()
+                ->where('public_token', $token)
+                ->lockForUpdate()
+                ->with(['deal.pipeline.stages', 'deal.contacts'])
+                ->firstOrFail();
+
+            // Re-check under the row lock so concurrent submissions cannot both accept.
+            $this->ensureAcceptable($quote);
+
+            $quote->update([
+                'status' => QuoteStatus::Accepted,
+                'accepted_at' => now(),
+                'signed_by_name' => trim($signedByName),
+                'signed_by_email' => strtolower(trim($signedByEmail)),
+            ]);
+
+            return $this->closeDealAsWon($quote);
+        });
+    }
+
+    /**
+     * @throws QuoteNotAcceptableException
+     */
+    protected function ensureAcceptable(Quote $quote): void
+    {
+        if ($quote->status->isTerminal()) {
+            throw new QuoteNotAcceptableException(match ($quote->status) {
+                QuoteStatus::Accepted => 'This quote proposal has already been accepted.',
+                QuoteStatus::Declined => 'This quote proposal has been declined and can no longer be accepted.',
+                default => 'This quote proposal has expired.',
+            });
         }
 
-        if ($quote->expires_at !== null && $quote->expires_at->isPast()) {
+        if ($quote->hasPassedExpiryDate()) {
             $quote->update(['status' => QuoteStatus::Expired]);
 
-            throw new InvalidArgumentException('This quote proposal has expired.');
+            throw new QuoteNotAcceptableException('This quote proposal has expired.');
         }
+    }
 
-        $quote->update([
-            'status' => QuoteStatus::Accepted,
-            'accepted_at' => now(),
-            'signed_by_name' => trim($signedByName),
-            'signed_by_email' => strtolower(trim($signedByEmail)),
-        ]);
-
+    protected function closeDealAsWon(Quote $quote): Quote
+    {
         $deal = $quote->deal;
         /** @var PipelineStage|null $wonStage */
         $wonStage = $deal->pipeline->stages->firstWhere('is_closed_won', true);

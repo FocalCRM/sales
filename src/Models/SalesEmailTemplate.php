@@ -71,7 +71,7 @@ class SalesEmailTemplate extends Model
     }
 
     /**
-     * Render the template by replacing merge tags with values.
+     * Render the template by replacing merge tags with values (HTML-escaped in body_html, as-is in the subject).
      *
      * @param  array<string, string>  $variables
      * @return array{subject: string, body_html: string}
@@ -84,12 +84,12 @@ class SalesEmailTemplate extends Model
         foreach ($variables as $key => $value) {
             $tag = '{{ '.$key.' }}';
             $subject = str_replace($tag, $value, $subject);
-            $body = str_replace($tag, $value, $body);
+            $body = str_replace($tag, e($value), $body);
 
             // Also support without spaces: {{key}}
             $tagNoSpaces = '{{'.$key.'}}';
             $subject = str_replace($tagNoSpaces, $value, $subject);
-            $body = str_replace($tagNoSpaces, $value, $body);
+            $body = str_replace($tagNoSpaces, e($value), $body);
         }
 
         return [
@@ -111,7 +111,7 @@ class SalesEmailTemplate extends Model
 
         return [
             'subject' => $parser->parse($this->subject, $context),
-            'body_html' => $parser->parse($this->body_html, $context),
+            'body_html' => $parser->parseHtml($this->body_html, $context),
         ];
     }
 }

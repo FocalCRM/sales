@@ -33,4 +33,20 @@ class SalesEmailTemplateTest extends TestCase
         $this->assertStringContainsString('about Annual SaaS Plan.', $rendered['body_html']);
         $this->assertStringContainsString('The proposal total is $12,000.', $rendered['body_html']);
     }
+
+    public function test_render_escapes_merge_values_in_body_html_but_not_subject(): void
+    {
+        $template = SalesEmailTemplate::create([
+            'name' => 'Escaping',
+            'subject' => 'Re: {{ deal.name }}',
+            'body_html' => '<p>About {{deal.name}}</p>',
+            'category' => 'follow_up',
+            'is_shared' => true,
+        ]);
+
+        $rendered = $template->render(['deal.name' => 'R&D <b>Expansion</b>']);
+
+        $this->assertSame('Re: R&D <b>Expansion</b>', $rendered['subject']);
+        $this->assertSame('<p>About R&amp;D &lt;b&gt;Expansion&lt;/b&gt;</p>', $rendered['body_html']);
+    }
 }
